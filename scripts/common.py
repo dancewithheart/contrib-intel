@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
@@ -41,3 +42,19 @@ def write_csv(path: Path, rows: list[dict[str, Any]], fieldnames: list[str]) -> 
         writer = csv.DictWriter(f, fieldnames=fieldnames)
         writer.writeheader()
         writer.writerows(rows)
+
+
+def run_git(repo_root: Path, args: list[str]) -> str:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=repo_root,
+        text=True,
+        capture_output=True,
+        check=True,
+    )
+    return result.stdout
+
+
+def git_tracked_files(repo_root: Path) -> list[str]:
+    output = run_git(repo_root, ["ls-files"])
+    return [line.strip() for line in output.splitlines() if line.strip()]

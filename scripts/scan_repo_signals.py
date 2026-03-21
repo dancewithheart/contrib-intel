@@ -5,7 +5,12 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-from scripts.common import load_config, write_csv, write_json
+from scripts.common import (
+    git_tracked_files,
+    load_config,
+    write_csv,
+    write_json,
+)
 
 
 TEXT_FILE_EXTENSIONS = {
@@ -44,27 +49,24 @@ def is_included(rel_path: str, config: dict) -> bool:
     return True
 
 
-def iter_text_files(root: Path, config: dict):
-    for path in root.rglob("*"):
-        if not path.is_file():
-            continue
+def iter_tracked_text_files(repo_root: Path, config: dict):
+    for rel in git_tracked_files(repo_root):
+        path = repo_root / rel
         if path.suffix not in TEXT_FILE_EXTENSIONS:
             continue
-        rel = str(path.relative_to(root))
-        if is_included(rel, config):
-            yield path
+        if not is_included(rel, config):
+            continue
+        yield rel, path
 
 
 def find_pattern_hits(repo_root: Path, patterns: list[str], config: dict) -> list[dict]:
     hits: list[dict] = []
 
-    for path in iter_text_files(repo_root, config):
+    for rel, path in iter_tracked_text_files(repo_root, config):
         try:
             lines = path.read_text(encoding="utf-8", errors="ignore").splitlines()
         except Exception:
             continue
-
-        rel = str(path.relative_to(repo_root))
 
         for line_no, line in enumerate(lines, start=1):
             lowered = line.lower()
@@ -85,13 +87,12 @@ def find_pattern_hits(repo_root: Path, patterns: list[str], config: dict) -> lis
 def count_subsystem_keywords(repo_root: Path, subsystems: dict[str, list[str]], config: dict) -> list[dict]:
     rows: list[dict] = []
 
-    for path in iter_text_files(repo_root, config):
+    for rel, path in iter_tracked_text_files(repo_root, config):
         try:
             text = path.read_text(encoding="utf-8", errors="ignore")
         except Exception:
             continue
 
-        rel = str(path.relative_to(repo_root))
         lowered = text.lower()
 
         for subsystem, keywords in subsystems.items():
