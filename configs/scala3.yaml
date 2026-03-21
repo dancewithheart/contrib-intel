@@ -3,7 +3,7 @@ owner: scala
 name: scala3
 
 paths:
-  local_repo: repos/scala3
+  local_repo: /home/piter/scala3
   data_dir: data/scala3
   report_path: reports/scala3-opportunities.md
 
@@ -11,6 +11,7 @@ github:
   per_page: 100
   max_issues: 300
   max_prs: 300
+  use_cache: true
 
 issue_queries:
   state: open
@@ -56,13 +57,6 @@ keywords:
     - "work around"
     - "re-enable"
     - "commented out"
-
-  bugfix_commit_terms:
-    - "fix"
-    - "bug"
-    - "regression"
-    - "warning"
-    - "error"
 
 scoring:
   issue_match: 3.0

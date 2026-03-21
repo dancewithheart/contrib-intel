@@ -2,16 +2,10 @@
 
 from __future__ import annotations
 
-import json
 import sys
 from pathlib import Path
 
-import yaml
-
-
-def load_config(path: str) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
+from scripts.common import load_config, read_json
 
 
 def main() -> None:
@@ -22,9 +16,9 @@ def main() -> None:
     config = load_config(sys.argv[1])
     data_dir = Path(config["paths"]["data_dir"])
     report_path = Path(config["paths"]["report_path"])
-    report_path.parent.mkdir(parents=True, exist_ok=True)
 
-    candidates = json.loads((data_dir / "candidates.json").read_text(encoding="utf-8"))
+    candidates = read_json(data_dir / "candidates.json", [])
+    report_path.parent.mkdir(parents=True, exist_ok=True)
 
     lines: list[str] = []
     lines.append(f"# {config['repo']} opportunity report")
@@ -38,7 +32,8 @@ def main() -> None:
         lines.append(f"- subsystem: `{candidate['subsystem']}`")
         lines.append(f"- overall score: **{candidate['scores']['overall']}**")
         lines.append(f"- issue count: {candidate['issue_count']}")
-        lines.append(f"- issues: {', '.join(f'#{n}' for n in candidate['issue_numbers']) or '(none)'}")
+        issues = ", ".join(f"#{n}" for n in candidate["issue_numbers"]) or "(none)"
+        lines.append(f"- issues: {issues}")
         lines.append("")
 
         if candidate["files"]:

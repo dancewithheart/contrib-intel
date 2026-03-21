@@ -2,13 +2,10 @@
 
 from __future__ import annotations
 
-import csv
-import json
-import re
 import sys
 from pathlib import Path
 
-import yaml
+from scripts.common import load_config, write_csv, write_json
 
 
 TEXT_FILE_EXTENSIONS = {
@@ -21,11 +18,6 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
     ".json",
 }
-
-
-def load_config(path: str) -> dict:
-    with open(path, "r", encoding="utf-8") as f:
-        return yaml.safe_load(f)
 
 
 def iter_text_files(root: Path):
@@ -43,12 +35,15 @@ def find_pattern_hits(repo_root: Path, patterns: list[str]) -> list[dict]:
         except Exception:
             continue
 
+        rel = str(path.relative_to(repo_root))
+
         for line_no, line in enumerate(lines, start=1):
+            lowered = line.lower()
             for pattern in patterns:
-                if pattern.lower() in line.lower():
+                if pattern.lower() in lowered:
                     hits.append(
                         {
-                            "file": str(path.relative_to(repo_root)),
+                            "file": rel,
                             "line": line_no,
                             "pattern": pattern,
                             "text": line.strip(),
@@ -59,7 +54,7 @@ def find_pattern_hits(repo_root: Path, patterns: list[str]) -> list[dict]:
 
 
 def count_subsystem_keywords(repo_root: Path, subsystems: dict[str, list[str]]) -> list[dict]:
-    counts: dict[tuple[str, str], int] = {}
+    rows: list[dict] = []
 
     for path in iter_text_files(repo_root):
         try:
@@ -68,23 +63,20 @@ def count_subsystem_keywords(repo_root: Path, subsystems: dict[str, list[str]]) 
             continue
 
         rel = str(path.relative_to(repo_root))
+        lowered = text.lower()
 
         for subsystem, keywords in subsystems.items():
-            total = sum(text.lower().count(keyword.lower()) for keyword in keywords)
-            if total > 0:
-                counts[(rel, subsystem)] = total
+            count = sum(lowered.count(keyword.lower()) for keyword in keywords)
+            if count > 0:
+                rows.append(
+                    {
+                        "file": rel,
+                        "subsystem": subsystem,
+                        "count": count,
+                    }
+                )
 
-    return [
-        {"file": file, "subsystem": subsystem, "count": count}
-        for (file, subsystem), count in sorted(counts.items())
-    ]
-
-
-def write_csv(path: Path, rows: list[dict], fieldnames: list[str]) -> None:
-    with open(path, "w", encoding="utf-8", newline="") as f:
-        writer = csv.DictWriter(f, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(rows)
+    return rows
 
 
 def main() -> None:
@@ -93,37 +85,24 @@ def main() -> None:
         sys.exit(1)
 
     config = load_config(sys.argv[1])
-    repo_root = Path(config["paths"]["local_repo"])
+    repo_root = Path(config["paths"]["local_repo"]).expanduser()
     data_dir = Path(config["paths"]["data_dir"])
-    data_dir.mkdir(parents=True, exist_ok=True)
 
-    grep_patterns = config["keywords"]["grep_patterns"]
-    subsystems = config["keywords"]["subsystems"]
+    todo_hits = find_pattern_hits(repo_root, config["keywords"]["grep_patterns"])
+    subsystem_hits = count_subsystem_keywords(repo_root, config["keywords"]["subsystems"])
 
-    todo_hits = find_pattern_hits(repo_root, grep_patterns)
-    subsystem_hits = count_subsystem_keywords(repo_root, subsystems)
+    write_csv(data_dir / "todo_hits.csv", todo_hits, ["file", "line", "pattern", "text"])
+    write_csv(data_dir / "subsystem_hits.csv", subsystem_hits, ["file", "subsystem", "count"])
+    write_json(
+        data_dir / "scan_summary.json",
+        {
+            "todo_hit_count": len(todo_hits),
+            "subsystem_file_matches": len(subsystem_hits),
+        },
+        )
 
-    write_csv(
-        data_dir / "todo_hits.csv",
-        todo_hits,
-        ["file", "line", "pattern", "text"],
-    )
-    write_csv(
-        data_dir / "subsystem_hits.csv",
-        subsystem_hits,
-        ["file", "subsystem", "count"],
-    )
-
-    summary = {
-        "todo_hit_count": len(todo_hits),
-        "subsystem_file_matches": len(subsystem_hits),
-    }
-    (data_dir / "scan_summary.json").write_text(
-        json.dumps(summary, indent=2), encoding="utf-8"
-    )
-
-    print(f"saved {len(todo_hits)} todo/signal hits")
-    print(f"saved {len(subsystem_hits)} subsystem file matches")
+    print(f"saved {len(todo_hits)} repo signal hits")
+    print(f"saved {len(subsystem_hits)} subsystem matches")
 
 
 if __name__ == "__main__":
