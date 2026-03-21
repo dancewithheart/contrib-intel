@@ -3,7 +3,7 @@ from pathlib import Path
 from scripts.scan_repo_signals import find_pattern_hits, count_subsystem_keywords
 
 
-def test_find_pattern_hits(tmp_path: Path):
+def test_finds_todo_and_todo_warn_hits_in_source_files(tmp_path: Path):
     repo = tmp_path / "repo"
     repo.mkdir()
     f = repo / "Test.scala"
@@ -18,12 +18,12 @@ def test_find_pattern_hits(tmp_path: Path):
     assert hits[0]["file"] == "Test.scala"
 
 
-def test_count_subsystem_keywords(tmp_path: Path):
+def test_counts_configured_subsystem_keywords_per_file(tmp_path: Path):
     repo = tmp_path / "repo"
     repo.mkdir()
     f = repo / "TypeComparer.scala"
     f.write_text(
-        "object X { val s = \"MatchTypeNoCases TypeComparer\" }\n",
+        'object X { val s = "MatchTypeNoCases TypeComparer" }\n',
         encoding="utf-8",
     )
 

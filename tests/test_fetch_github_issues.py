@@ -3,7 +3,7 @@ from pathlib import Path
 from scripts.common import write_json, read_json
 
 
-def test_cached_issue_files_are_read(tmp_path: Path):
+def test_reads_cached_issue_and_pr_files_without_network(tmp_path: Path):
     data_dir = tmp_path / "data" / "scala3"
     issues_path = data_dir / "issues.json"
     prs_path = data_dir / "prs.json"
