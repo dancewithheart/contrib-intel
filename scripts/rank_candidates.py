@@ -6,7 +6,7 @@ import sys
 from collections import defaultdict
 from pathlib import Path
 
-from scripts.common import load_config, read_csv, read_json, write_json
+from scripts.common import days_since, load_config, read_csv, read_json, write_json
 
 
 def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
@@ -18,6 +18,67 @@ def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
             ]
     ).lower()
     return any(keyword.lower() in text for keyword in keywords)
+
+
+def load_issue_context(data_dir: Path) -> dict[int, dict]:
+    index = read_json(data_dir / "issue_context_index.json", [])
+    result: dict[int, dict] = {}
+
+    for row in index:
+        number = row["number"]
+        comments = read_json(Path(row["comments_path"]), [])
+        timeline = read_json(Path(row["timeline_path"]), [])
+        result[number] = {
+            "comments": comments,
+            "timeline": timeline,
+        }
+
+    return result
+
+
+def analyze_issue_context(issue: dict, context: dict | None, config: dict) -> dict:
+    rules = config["context_rules"]
+    maintainer_handles = {x.lower() for x in rules.get("maintainer_handles", [])}
+    hint_phrases = [x.lower() for x in rules.get("maintainer_hint_phrases", [])]
+    dormant_days_threshold = rules.get("dormant_days_threshold", 120)
+
+    same_repo_prs = 0
+    external_refs = 0
+    maintainer_hints: list[str] = []
+
+    if context:
+        for event in context.get("timeline", []):
+            if event.get("event") == "cross-referenced":
+                source = event.get("source") or {}
+                source_issue = source.get("issue") or {}
+                repo = (source_issue.get("repository") or {}).get("full_name")
+                is_pr = "pull_request" in source_issue
+
+                if is_pr and repo == f"{config['owner']}/{config['name']}":
+                    same_repo_prs += 1
+                elif repo and repo != f"{config['owner']}/{config['name']}":
+                    external_refs += 1
+
+        for comment in context.get("comments", []):
+            user = ((comment.get("user") or {}).get("login") or "").lower()
+            body = (comment.get("body") or "").lower()
+
+            if user in maintainer_handles:
+                for phrase in hint_phrases:
+                    if phrase in body:
+                        maintainer_hints.append(phrase)
+                        break
+
+    dormant_days = days_since(issue.get("updated_at"))
+    is_dormant = dormant_days is not None and dormant_days >= dormant_days_threshold
+
+    return {
+        "same_repo_prs": same_repo_prs,
+        "external_refs": external_refs,
+        "maintainer_hints": maintainer_hints,
+        "dormant_days": dormant_days,
+        "is_dormant": is_dormant,
+    }
 
 
 def build_topic_map(
@@ -54,6 +115,7 @@ def build_topic_map(
 
 def build_issue_clusters(
         issues: list[dict],
+        issue_context: dict[int, dict],
         subsystem_hits: list[dict],
         todo_hits: list[dict],
         file_churn: list[dict],
@@ -61,6 +123,7 @@ def build_issue_clusters(
         config: dict,
 ) -> list[dict]:
     scoring = config["scoring"]
+    context_scoring = config["context_scoring"]
     subsystem_keywords = config["keywords"]["subsystems"]
     boost_terms = config["ranking_rules"]["boost_if_comment_mentions"]
 
@@ -94,11 +157,41 @@ def build_issue_clusters(
                     todo_score += scoring["dormant_bonus"]
                     notes.append(f"{file}:{hit['line']} mentions {hit['pattern']}")
 
+        analyzed_issues = []
+        same_repo_pr_count = 0
+        external_ref_count = 0
+        maintainer_hint_count = 0
+        dormant_count = 0
+
+        for issue in matching_issues:
+            analysis = analyze_issue_context(issue, issue_context.get(issue["number"]), config)
+            analyzed_issues.append({"number": issue["number"], "analysis": analysis})
+
+            same_repo_pr_count += analysis["same_repo_prs"]
+            external_ref_count += analysis["external_refs"]
+            maintainer_hint_count += len(analysis["maintainer_hints"])
+            dormant_count += 1 if analysis["is_dormant"] else 0
+
         issue_score = len(matching_issues) * scoring["issue_match"]
         repo_signal_score = sum(int(row["count"]) for row in matching_files[:5]) * scoring["repo_signal"]
         churn_score = sum(churn_by_file.get(file, 0) for file in top_files) * scoring["churn"]
         bugfix_score = sum(bugfix_by_file.get(file, 0) for file in top_files) * scoring["bugfix_churn"]
-        overall = issue_score + repo_signal_score + churn_score + bugfix_score + todo_score + scoring["personal_interest_bonus"]
+
+        context_score = 0.0
+        context_score -= same_repo_pr_count * context_scoring["same_repo_pr_penalty"]
+        context_score += external_ref_count * context_scoring["external_reference_bonus"]
+        context_score += maintainer_hint_count * context_scoring["maintainer_hint_bonus"]
+        context_score += dormant_count * context_scoring["dormant_bonus"]
+
+        overall = (
+                issue_score
+                + repo_signal_score
+                + churn_score
+                + bugfix_score
+                + todo_score
+                + context_score
+                + scoring["personal_interest_bonus"]
+        )
 
         clusters.append(
             {
@@ -113,8 +206,16 @@ def build_issue_clusters(
                     "churn_score": round(churn_score, 2),
                     "bugfix_score": round(bugfix_score, 2),
                     "todo_score": round(todo_score, 2),
+                    "context_score": round(context_score, 2),
                     "overall": round(overall, 2),
                 },
+                "context_summary": {
+                    "same_repo_pr_count": same_repo_pr_count,
+                    "external_ref_count": external_ref_count,
+                    "maintainer_hint_count": maintainer_hint_count,
+                    "dormant_issue_count": dormant_count,
+                },
+                "issue_context_examples": analyzed_issues[:5],
                 "notes": notes[:5],
             }
         )
@@ -160,6 +261,7 @@ def main() -> None:
     data_dir = Path(config["paths"]["data_dir"])
 
     issues = read_json(data_dir / "issues.json", [])
+    issue_context = load_issue_context(data_dir)
     todo_hits = read_csv(data_dir / "todo_hits.csv")
     subsystem_hits = read_csv(data_dir / "subsystem_hits.csv")
     file_churn = read_csv(data_dir / "file_churn.csv")
@@ -168,6 +270,7 @@ def main() -> None:
     topic_map = build_topic_map(issues, subsystem_hits, config["keywords"]["subsystems"])
     issue_clusters = build_issue_clusters(
         issues,
+        issue_context,
         subsystem_hits,
         todo_hits,
         file_churn,

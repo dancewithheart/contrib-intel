@@ -5,6 +5,7 @@ import json
 import subprocess
 from pathlib import Path
 from typing import Any
+from datetime import datetime, timezone
 
 import yaml
 
@@ -58,3 +59,20 @@ def run_git(repo_root: Path, args: list[str]) -> str:
 def git_tracked_files(repo_root: Path) -> list[str]:
     output = run_git(repo_root, ["ls-files"])
     return [line.strip() for line in output.splitlines() if line.strip()]
+
+
+def parse_github_datetime(value: str | None) -> datetime | None:
+    if not value:
+        return None
+    try:
+        return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+    except ValueError:
+        return None
+
+
+def days_since(value: str | None) -> int | None:
+    dt = parse_github_datetime(value)
+    if dt is None:
+        return None
+    now = datetime.now(timezone.utc)
+    return (now - dt).days

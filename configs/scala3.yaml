@@ -12,6 +12,7 @@ github:
   max_issues: 300
   max_prs: 300
   use_cache: true
+  max_issue_context: 20
 
 issue_queries:
   state: open
@@ -90,3 +91,32 @@ ranking_rules:
     - "TODO warn"
     - "re-enable"
     - "regression"
+
+context_rules:
+  maintainer_handles:
+    - "odersky"
+    - "smarter"
+    - "som-snytt"
+    - "Eugene-Yang"
+    - "EugeneFlesselle"
+
+  maintainer_hint_phrases:
+    - "we should"
+    - "would be nice"
+    - "follow-up"
+    - "good first issue"
+    - "another instance of"
+    - "should either"
+    - "this looks wrong"
+    - "this doesn't look right"
+    - "it would be sensible"
+    - "I agree"
+    - "we could"
+
+  dormant_days_threshold: 120
+
+  context_scoring:
+    same_repo_pr_penalty: 4.0
+    external_reference_bonus: 3.0
+    maintainer_hint_bonus: 4.0
+    dormant_bonus: 2.0

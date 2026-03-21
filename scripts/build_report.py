@@ -48,6 +48,15 @@ def render_issue_clusters(issue_clusters: list[dict]) -> list[str]:
             for file in cluster["files"]:
                 lines.append(f"  - `{file}`")
             lines.append("")
+
+        context = cluster.get("context_summary", {})
+        lines.append("- linkage/context signals:")
+        lines.append(f"  - same-repo PR links: {context.get('same_repo_pr_count', 0)}")
+        lines.append(f"  - external repo references: {context.get('external_ref_count', 0)}")
+        lines.append(f"  - maintainer hint comments: {context.get('maintainer_hint_count', 0)}")
+        lines.append(f"  - dormant issues: {context.get('dormant_issue_count', 0)}")
+        lines.append("")
+
         if cluster["notes"]:
             lines.append("- notes:")
             for note in cluster["notes"]:

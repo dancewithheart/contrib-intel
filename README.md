@@ -2,6 +2,7 @@
 
 ```sh
 python3 -m scripts.fetch_github_issues configs/scala3.yaml
+python3 -m scripts.fetch_issue_context.py configs/scala3.yaml
 python3 -m scripts.fetch_github_issues configs/scala3.yaml --refresh
 
 python3 -m scripts.scan_repo_signals configs/scala3.yaml
