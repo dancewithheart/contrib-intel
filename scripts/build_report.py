@@ -8,6 +8,32 @@ from pathlib import Path
 from scripts.common import load_config, read_json
 
 
+def make_summary(candidates: list[dict]) -> list[str]:
+    lines: list[str] = []
+    top = candidates[:3]
+
+    lines.append("## Short summary")
+    lines.append("")
+
+    if not top:
+        lines.append("No candidates found.")
+        lines.append("")
+        return lines
+
+    lines.append("Most promising current directions to inspect next:")
+    lines.append("")
+    for idx, candidate in enumerate(top, start=1):
+        issue_sample = ", ".join(f"#{n}" for n in candidate["issue_numbers"][:3]) or "no issue sample"
+        file_sample = ", ".join(f"`{f}`" for f in candidate["files"][:2]) or "no file sample"
+        lines.append(
+            f"{idx}. **{candidate['title']}** — issues {issue_sample}; files {file_sample}"
+        )
+    lines.append("")
+    lines.append("Interpret this as a shortlist for manual inspection, not as an automatic decision.")
+    lines.append("")
+    return lines
+
+
 def main() -> None:
     if len(sys.argv) != 2:
         print("usage: build_report.py <config.yaml>")
@@ -23,6 +49,7 @@ def main() -> None:
     lines: list[str] = []
     lines.append(f"# {config['repo']} opportunity report")
     lines.append("")
+    lines.extend(make_summary(candidates))
     lines.append("Top ranked candidate subsystems from iteration 1.")
     lines.append("")
 

@@ -58,6 +58,25 @@ keywords:
     - "re-enable"
     - "commented out"
 
+filters:
+  include_paths:
+    - "compiler/src/dotty/tools/dotc/"
+    - "compiler/test/"
+    - "tests/"
+  exclude_paths:
+    - "out/"
+    - "target/"
+    - "docs/"
+    - "library/"
+    - "scala3doc/"
+    - "sbt-test/"
+    - "tests/pos-with-compiler-cc/"
+  exclude_file_names:
+    - "output_full.txt"
+  exclude_suffixes:
+    - ".semanticdb"
+    - ".log"
+
 scoring:
   issue_match: 3.0
   repo_signal: 2.0
