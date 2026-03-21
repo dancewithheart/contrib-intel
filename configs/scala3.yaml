@@ -1,0 +1,79 @@
+repo: scala3
+owner: scala
+name: scala3
+
+paths:
+  local_repo: repos/scala3
+  data_dir: data/scala3
+  report_path: reports/scala3-opportunities.md
+
+github:
+  per_page: 100
+  max_issues: 300
+  max_prs: 300
+
+issue_queries:
+  state: open
+  labels_include: []
+  labels_exclude:
+    - question
+
+keywords:
+  subsystems:
+    match_types:
+      - "match type"
+      - "matchtype"
+      - "MatchType"
+      - "MatchTypeNoCases"
+      - "TypeComparer"
+    typer:
+      - "Typer"
+      - "typedValDef"
+      - "typedExpr"
+      - "typedType"
+    namer:
+      - "Namer"
+      - "rhsType"
+      - "cookedRhsType"
+      - "inferredResultType"
+    diagnostics:
+      - "warning"
+      - "error message"
+      - "diagnostic"
+      - "source position"
+      - "report.warning"
+    explicit_nulls:
+      - "explicit nulls"
+      - "unsafeNulls"
+      - "nullable"
+      - "Null"
+
+  grep_patterns:
+    - "TODO"
+    - "FIXME"
+    - "TODO warn"
+    - "should not happen"
+    - "work around"
+    - "re-enable"
+    - "commented out"
+
+  bugfix_commit_terms:
+    - "fix"
+    - "bug"
+    - "regression"
+    - "warning"
+    - "error"
+
+scoring:
+  issue_match: 3.0
+  repo_signal: 2.0
+  churn: 1.5
+  bugfix_churn: 2.5
+  dormant_bonus: 2.0
+  personal_interest_bonus: 1.5
+
+ranking_rules:
+  boost_if_comment_mentions:
+    - "TODO warn"
+    - "re-enable"
+    - "regression"
