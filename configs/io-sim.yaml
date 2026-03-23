@@ -1,0 +1,120 @@
+repo: io-sim
+owner: input-output-hk
+name: io-sim
+
+paths:
+  local_repo: /home/piter/io-sim
+  data_dir: data/io-sim
+  report_path: reports/io-sim-opportunities.md
+
+github:
+  per_page: 100
+  max_issues: 200
+  max_prs: 200
+  use_cache: true
+  max_issue_context: 20
+
+issue_queries:
+  state: open
+  labels_include: []
+  labels_exclude:
+    - question
+
+keywords:
+  subsystems:
+    por:
+      - "por"
+      - "partial order reduction"
+      - "exploreSimTrace"
+      - "IOSimPOR"
+      - "schedule"
+    traces:
+      - "SimTrace"
+      - "trace"
+      - "trace explorer"
+      - "trace event"
+      - "runSimTrace"
+    generators:
+      - "QuickCheck"
+      - "Gen"
+      - "runIOSimGen"
+      - "monadic"
+      - "property"
+    stm:
+      - "STM"
+      - "TVar"
+      - "atomically"
+      - "retry"
+      - "orElse"
+    exceptions:
+      - "exception"
+      - "throw"
+      - "mask"
+      - "bracket"
+      - "async exception"
+
+  grep_patterns:
+    - "TODO"
+    - "FIXME"
+    - "XXX"
+    - "HACK"
+    - "should not happen"
+    - "work around"
+    - "re-enable"
+    - "commented out"
+
+filters:
+  include_paths:
+    - "io-sim/src/"
+    - "io-sim/test/"
+    - "io-classes/io-classes/"
+    - "io-classes/test/"
+    - "io-classes/si-timers/src/"
+    - "io-classes/si-timers/test/"
+    - "io-classes/strict-mvar/src/"
+    - "io-classes/strict-mvar/test/"
+    - "io-classes/strict-stm/"
+    - "io-classes/mtl/"
+  exclude_paths:
+    - ".github/"
+    - "scripts/"
+    - "dist-newstyle/"
+    - ".stack-work/"
+  exclude_file_names: []
+  exclude_suffixes:
+    - ".log"
+
+scoring:
+  issue_match: 3.0
+  repo_signal: 2.0
+  churn: 1.5
+  bugfix_churn: 2.5
+  dormant_bonus: 2.0
+  personal_interest_bonus: 1.5
+
+ranking_rules:
+  boost_if_comment_mentions:
+    - "re-enable"
+    - "regression"
+    - "property"
+
+context_rules:
+  maintainer_handles:
+    - "graninas"
+    - "lehins"
+    - "bollu"
+    - "edsko"
+  maintainer_hint_phrases:
+    - "we should"
+    - "would be nice"
+    - "follow-up"
+    - "good first issue"
+    - "another instance of"
+    - "it would be sensible"
+  dormant_days_threshold: 120
+
+context_scoring:
+  same_repo_pr_penalty: 4.0
+  external_reference_bonus: 3.0
+  maintainer_hint_bonus: 4.0
+  dormant_bonus: 2.0
