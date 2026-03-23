@@ -23,35 +23,39 @@ issue_queries:
 keywords:
   subsystems:
     por:
-      - "por"
-      - "partial order reduction"
-      - "exploreSimTrace"
       - "IOSimPOR"
+      - "Partial Order Reduction"
+      - "POR"
       - "schedule"
+      - "descheduling"
+      - "exploration"
+      - "propExploration"
     traces:
       - "SimTrace"
       - "trace"
-      - "trace explorer"
       - "trace event"
-      - "runSimTrace"
+      - "eventlog"
+      - "deadlock"
     generators:
       - "QuickCheck"
       - "Gen"
+      - "PropertyM"
       - "runIOSimGen"
-      - "monadic"
-      - "property"
+      - "runIOSimPORGen"
     stm:
       - "STM"
       - "TVar"
-      - "atomically"
+      - "TMVar"
+      - "TQueue"
+      - "TBQueue"
       - "retry"
       - "orElse"
     exceptions:
-      - "exception"
-      - "throw"
-      - "mask"
-      - "bracket"
       - "async exception"
+      - "mask"
+      - "throw"
+      - "bracket"
+      - "catch"
 
   grep_patterns:
     - "TODO"
@@ -83,6 +87,7 @@ filters:
   exclude_file_names: []
   exclude_suffixes:
     - ".log"
+    - ".md"
 
 scoring:
   issue_match: 3.0

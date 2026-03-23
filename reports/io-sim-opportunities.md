@@ -12,16 +12,16 @@ Use the sections below differently:
 Most promising current issue-cluster directions:
 
 1. **Por** — issues #244, #229, #227; files no file sample
-2. **Stm** — issues #219, #183, #180; files `io-classes/strict-stm/README.md`
-3. **Traces** — issues #229, #219, #183; files no file sample
+2. **Traces** — issues #247, #229, #219; files no file sample
+3. **Stm** — issues #219, #183, #180; files no file sample
 
 Top concrete issue candidates:
 
 - **#160** Minimize redundancy in IOSimPOR logs (subsystem: `exceptions`, score: 144.0) — candidate for revival: dormant but still open
-- **#148** IOSimPOR propExploration failure (subsystem: `por`, score: 60.0) — candidate for revival: dormant but still open
-- **#229** Missing `PropertyM` callbacks for `IOSimPOR` (subsystem: `por`, score: 15.0) — candidate for revival: dormant but still open
-- **#183** IOSimPOR fails to find a race under specific circumstances (subsystem: `traces`, score: 11.0) — candidate for revival: dormant but still open
-- **#180** Implement combinator that forbids descheduling (subsystem: `por`, score: 8.0) — good candidate: externally relevant
+- **#148** IOSimPOR propExploration failure (subsystem: `por`, score: 66.0) — candidate for revival: dormant but still open
+- **#183** IOSimPOR fails to find a race under specific circumstances (subsystem: `traces`, score: 15.0) — candidate for revival: dormant but still open
+- **#229** Missing `PropertyM` callbacks for `IOSimPOR` (subsystem: `por`, score: 13.0) — candidate for revival: dormant but still open
+- **#180** Implement combinator that forbids descheduling (subsystem: `por`, score: 9.0) — good candidate: externally relevant
 
 ## Issue clusters
 
@@ -48,10 +48,29 @@ Top concrete issue candidates:
   - maintainer hint comments: 0
   - dormant issues: 9
 
+### Traces
+
+- subsystem: `traces`
+- overall score: **32.5**
+- issue count: 6
+- issues:
+  - [#247 — `io-sim-1.10` compiler error when used with `io-classes-1.9`](https://github.com/input-output-hk/io-sim/issues/247)
+  - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
+  - [#219 — Trace information about deadlock](https://github.com/input-output-hk/io-sim/issues/219)
+  - [#183 — IOSimPOR fails to find a race under specific circumstances](https://github.com/input-output-hk/io-sim/issues/183)
+  - [#160 — Minimize redundancy in IOSimPOR logs](https://github.com/input-output-hk/io-sim/issues/160)
+  - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
+
+- linkage/context signals:
+  - same-repo PR links: 0
+  - external repo references: 1
+  - maintainer hint comments: 0
+  - dormant issues: 5
+
 ### Stm
 
 - subsystem: `stm`
-- overall score: **39.0**
+- overall score: **27.5**
 - issue count: 7
 - issues:
   - [#219 — Trace information about deadlock](https://github.com/input-output-hk/io-sim/issues/219)
@@ -62,42 +81,20 @@ Top concrete issue candidates:
   - [#137 — Write compatibility tests for `io` and `io-sim`'s stm APIs](https://github.com/input-output-hk/io-sim/issues/137)
   - [#36 — Add support for nested exception testing in Test/STM](https://github.com/input-output-hk/io-sim/issues/36)
 
-- top files:
-  - `io-classes/strict-stm/README.md`
-
 - linkage/context signals:
   - same-repo PR links: 3
   - external repo references: 1
   - maintainer hint comments: 0
   - dormant issues: 7
 
-### Traces
-
-- subsystem: `traces`
-- overall score: **26.5**
-- issue count: 5
-- issues:
-  - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
-  - [#219 — Trace information about deadlock](https://github.com/input-output-hk/io-sim/issues/219)
-  - [#183 — IOSimPOR fails to find a race under specific circumstances](https://github.com/input-output-hk/io-sim/issues/183)
-  - [#160 — Minimize redundancy in IOSimPOR logs](https://github.com/input-output-hk/io-sim/issues/160)
-  - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
-
-- linkage/context signals:
-  - same-repo PR links: 0
-  - external repo references: 0
-  - maintainer hint comments: 0
-  - dormant issues: 5
-
 ### Generators
 
 - subsystem: `generators`
-- overall score: **25.5**
-- issue count: 6
+- overall score: **20.5**
+- issue count: 5
 - issues:
   - [#248 — Test suite is missing lower bound on QuickCheck](https://github.com/input-output-hk/io-sim/issues/248)
   - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
-  - [#183 — IOSimPOR fails to find a race under specific circumstances](https://github.com/input-output-hk/io-sim/issues/183)
   - [#148 — IOSimPOR propExploration failure](https://github.com/input-output-hk/io-sim/issues/148)
   - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
   - [#36 — Add support for nested exception testing in Test/STM](https://github.com/input-output-hk/io-sim/issues/36)
@@ -106,7 +103,7 @@ Top concrete issue candidates:
   - same-repo PR links: 1
   - external repo references: 0
   - maintainer hint comments: 0
-  - dormant issues: 5
+  - dormant issues: 4
 
 ### Exceptions
 
@@ -148,7 +145,7 @@ Concrete issues enriched with contribution signals.
 ### #148 — IOSimPOR propExploration failure
 
 - subsystem guess: `por`
-- local score: **60.0**
+- local score: **66.0**
 - recommendation: candidate for revival: dormant but still open
 - issue url: https://github.com/input-output-hk/io-sim/issues/148
 
@@ -161,26 +158,10 @@ Concrete issues enriched with contribution signals.
   - maintainer-hint count: 0
   - dormant days: 756
 
-### #229 — Missing `PropertyM` callbacks for `IOSimPOR`
-
-- subsystem guess: `por`
-- local score: **15.0**
-- recommendation: candidate for revival: dormant but still open
-- issue url: https://github.com/input-output-hk/io-sim/issues/229
-
-- contribution signals:
-  - already actively worked on in same repo? no
-  - same-repo PR links: 0
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 146
-
 ### #183 — IOSimPOR fails to find a race under specific circumstances
 
 - subsystem guess: `traces`
-- local score: **11.0**
+- local score: **15.0**
 - recommendation: candidate for revival: dormant but still open
 - issue url: https://github.com/input-output-hk/io-sim/issues/183
 
@@ -193,10 +174,26 @@ Concrete issues enriched with contribution signals.
   - maintainer-hint count: 0
   - dormant days: 523
 
+### #229 — Missing `PropertyM` callbacks for `IOSimPOR`
+
+- subsystem guess: `por`
+- local score: **13.0**
+- recommendation: candidate for revival: dormant but still open
+- issue url: https://github.com/input-output-hk/io-sim/issues/229
+
+- contribution signals:
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
+  - referenced by external repos? no
+  - external references: 0
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 146
+
 ### #180 — Implement combinator that forbids descheduling
 
 - subsystem guess: `por`
-- local score: **8.0**
+- local score: **9.0**
 - recommendation: good candidate: externally relevant
 - issue url: https://github.com/input-output-hk/io-sim/issues/180
 
@@ -208,6 +205,38 @@ Concrete issues enriched with contribution signals.
   - maintainer hinted direction? no
   - maintainer-hint count: 0
   - dormant days: 521
+
+### #247 — `io-sim-1.10` compiler error when used with `io-classes-1.9`
+
+- subsystem guess: `traces`
+- local score: **6.0**
+- recommendation: good candidate: externally relevant
+- issue url: https://github.com/input-output-hk/io-sim/issues/247
+
+- contribution signals:
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
+  - referenced by external repos? yes
+  - external references: 1
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 14
+
+### #219 — Trace information about deadlock
+
+- subsystem guess: `traces`
+- local score: **6.0**
+- recommendation: candidate for revival: dormant but still open
+- issue url: https://github.com/input-output-hk/io-sim/issues/219
+
+- contribution signals:
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
+  - referenced by external repos? no
+  - external references: 0
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 272
 
 ### #125 — Make it possible to generate schedules
 
@@ -225,22 +254,6 @@ Concrete issues enriched with contribution signals.
   - maintainer-hint count: 0
   - dormant days: 830
 
-### #36 — Add support for nested exception testing in Test/STM
-
-- subsystem guess: `exceptions`
-- local score: **6.0**
-- recommendation: likely already active; inspect before contributing
-- issue url: https://github.com/input-output-hk/io-sim/issues/36
-
-- contribution signals:
-  - already actively worked on in same repo? yes
-  - same-repo PR links: 1
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 533
-
 ### #244 — SimEvent redesign
 
 - subsystem guess: `por`
@@ -257,38 +270,6 @@ Concrete issues enriched with contribution signals.
   - maintainer-hint count: 0
   - dormant days: 38
 
-### #219 — Trace information about deadlock
-
-- subsystem guess: `traces`
-- local score: **4.0**
-- recommendation: candidate for revival: dormant but still open
-- issue url: https://github.com/input-output-hk/io-sim/issues/219
-
-- contribution signals:
-  - already actively worked on in same repo? no
-  - same-repo PR links: 0
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 272
-
-### #247 — `io-sim-1.10` compiler error when used with `io-classes-1.9`
-
-- subsystem guess: `unknown`
-- local score: **3.0**
-- recommendation: good candidate: externally relevant
-- issue url: https://github.com/input-output-hk/io-sim/issues/247
-
-- contribution signals:
-  - already actively worked on in same repo? no
-  - same-repo PR links: 0
-  - referenced by external repos? yes
-  - external references: 1
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 14
-
 ### #227 — Figure out if a thread is alive in `io-classes`
 
 - subsystem guess: `por`
@@ -304,6 +285,22 @@ Concrete issues enriched with contribution signals.
   - maintainer hinted direction? no
   - maintainer-hint count: 0
   - dormant days: 146
+
+### #36 — Add support for nested exception testing in Test/STM
+
+- subsystem guess: `por`
+- local score: **3.0**
+- recommendation: likely already active; inspect before contributing
+- issue url: https://github.com/input-output-hk/io-sim/issues/36
+
+- contribution signals:
+  - already actively worked on in same repo? yes
+  - same-repo PR links: 1
+  - referenced by external repos? no
+  - external references: 0
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 533
 
 ### #248 — Test suite is missing lower bound on QuickCheck
 
@@ -335,7 +332,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 256
+  - dormant days: 257
 
 ### #122 — Add a link to the `io-sim` hackage pages in the README and/or repo description
 
@@ -417,6 +414,22 @@ Concrete issues enriched with contribution signals.
   - maintainer-hint count: 0
   - dormant days: 941
 
+### #137 — Write compatibility tests for `io` and `io-sim`'s stm APIs
+
+- subsystem guess: `stm`
+- local score: **-2.0**
+- recommendation: likely already active; inspect before contributing
+- issue url: https://github.com/input-output-hk/io-sim/issues/137
+
+- contribution signals:
+  - already actively worked on in same repo? yes
+  - same-repo PR links: 2
+  - referenced by external repos? no
+  - external references: 0
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 782
+
 ### #128 — Add Chan, QSem and QSenN
 
 - subsystem guess: `unknown`
@@ -432,22 +445,6 @@ Concrete issues enriched with contribution signals.
   - maintainer hinted direction? no
   - maintainer-hint count: 0
   - dormant days: 830
-
-### #84 — timeout in si-timers is not designed for 32-bit systems
-
-- subsystem guess: `unknown`
-- local score: **-2.0**
-- recommendation: likely already active; inspect before contributing
-- issue url: https://github.com/input-output-hk/io-sim/issues/84
-
-- contribution signals:
-  - already actively worked on in same repo? yes
-  - same-repo PR links: 1
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 533
 
 ## Churn / test investment report
 
@@ -500,30 +497,27 @@ Top files where tests, refactors, or smaller components may pay off:
   - [#36 — Add support for nested exception testing in Test/STM](https://github.com/input-output-hk/io-sim/issues/36)
 
 
-- representative files:
-  - `io-classes/strict-stm/README.md`
-
-### Generators
+### Traces
 
 - issue count: 6
 - issues:
-  - [#248 — Test suite is missing lower bound on QuickCheck](https://github.com/input-output-hk/io-sim/issues/248)
-  - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
-  - [#183 — IOSimPOR fails to find a race under specific circumstances](https://github.com/input-output-hk/io-sim/issues/183)
-  - [#148 — IOSimPOR propExploration failure](https://github.com/input-output-hk/io-sim/issues/148)
-  - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
-  - [#36 — Add support for nested exception testing in Test/STM](https://github.com/input-output-hk/io-sim/issues/36)
-
-
-### Traces
-
-- issue count: 5
-- issues:
+  - [#247 — `io-sim-1.10` compiler error when used with `io-classes-1.9`](https://github.com/input-output-hk/io-sim/issues/247)
   - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
   - [#219 — Trace information about deadlock](https://github.com/input-output-hk/io-sim/issues/219)
   - [#183 — IOSimPOR fails to find a race under specific circumstances](https://github.com/input-output-hk/io-sim/issues/183)
   - [#160 — Minimize redundancy in IOSimPOR logs](https://github.com/input-output-hk/io-sim/issues/160)
   - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
+
+
+### Generators
+
+- issue count: 5
+- issues:
+  - [#248 — Test suite is missing lower bound on QuickCheck](https://github.com/input-output-hk/io-sim/issues/248)
+  - [#229 — Missing `PropertyM` callbacks for `IOSimPOR`](https://github.com/input-output-hk/io-sim/issues/229)
+  - [#148 — IOSimPOR propExploration failure](https://github.com/input-output-hk/io-sim/issues/148)
+  - [#125 — Make it possible to generate schedules](https://github.com/input-output-hk/io-sim/issues/125)
+  - [#36 — Add support for nested exception testing in Test/STM](https://github.com/input-output-hk/io-sim/issues/36)
 
 
 ### Exceptions
