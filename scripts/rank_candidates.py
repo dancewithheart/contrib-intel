@@ -104,14 +104,20 @@ def build_topic_map(
             {
                 "subsystem": subsystem,
                 "title": subsystem.replace("_", " ").title(),
-                "issue_numbers": [issue["number"] for issue in matching_issues[:10]],
+                "issues": [
+                    {
+                        "number": issue["number"],
+                        "title": issue.get("title", ""),
+                        "url": issue.get("html_url", ""),
+                    }
+                    for issue in matching_issues[:10]
+                ],
                 "issue_count": len(matching_issues),
                 "files": [row["file"] for row in matching_files[:5]],
             }
         )
 
     return sorted(results, key=lambda x: x["issue_count"], reverse=True)
-
 
 def build_issue_clusters(
         issues: list[dict],
@@ -197,7 +203,14 @@ def build_issue_clusters(
             {
                 "title": subsystem.replace("_", " ").title(),
                 "subsystem": subsystem,
-                "issue_numbers": [issue["number"] for issue in matching_issues[:10]],
+                "issues": [
+                    {
+                        "number": issue["number"],
+                        "title": issue.get("title", ""),
+                        "url": issue.get("html_url", ""),
+                    }
+                    for issue in matching_issues[:10]
+                ],
                 "issue_count": len(matching_issues),
                 "files": top_files,
                 "scores": {
@@ -221,6 +234,179 @@ def build_issue_clusters(
         )
 
     return sorted(clusters, key=lambda c: c["scores"]["overall"], reverse=True)
+
+
+def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
+    text = " ".join(
+        [
+            issue.get("title", ""),
+            issue.get("body") or "",
+            " ".join(label["name"] for label in issue.get("labels", [])),
+            ]
+    ).lower()
+    return any(keyword.lower() in text for keyword in keywords)
+
+
+def load_issue_context(data_dir: Path) -> dict[int, dict]:
+    index = read_json(data_dir / "issue_context_index.json", [])
+    result: dict[int, dict] = {}
+
+    for row in index:
+        number = row["number"]
+        comments = read_json(Path(row["comments_path"]), [])
+        timeline = read_json(Path(row["timeline_path"]), [])
+        result[number] = {
+            "comments": comments,
+            "timeline": timeline,
+        }
+
+    return result
+
+
+def analyze_issue_context(issue: dict, context: dict | None, config: dict) -> dict:
+    rules = config["context_rules"]
+    maintainer_handles = {x.lower() for x in rules.get("maintainer_handles", [])}
+    hint_phrases = [x.lower() for x in rules.get("maintainer_hint_phrases", [])]
+    dormant_days_threshold = rules.get("dormant_days_threshold", 120)
+
+    same_repo_prs = 0
+    external_refs = 0
+    maintainer_hints: list[str] = []
+
+    if context:
+        for event in context.get("timeline", []):
+            if event.get("event") == "cross-referenced":
+                source = event.get("source") or {}
+                source_issue = source.get("issue") or {}
+                repo = (source_issue.get("repository") or {}).get("full_name")
+                is_pr = "pull_request" in source_issue
+
+                if is_pr and repo == f"{config['owner']}/{config['name']}":
+                    same_repo_prs += 1
+                elif repo and repo != f"{config['owner']}/{config['name']}":
+                    external_refs += 1
+
+        for comment in context.get("comments", []):
+            user = ((comment.get("user") or {}).get("login") or "").lower()
+            body = (comment.get("body") or "").lower()
+
+            if user in maintainer_handles:
+                for phrase in hint_phrases:
+                    if phrase in body:
+                        maintainer_hints.append(phrase)
+                        break
+
+    dormant_days = days_since(issue.get("updated_at"))
+    is_dormant = dormant_days is not None and dormant_days >= dormant_days_threshold
+
+    return {
+        "same_repo_prs": same_repo_prs,
+        "external_refs": external_refs,
+        "maintainer_hints": maintainer_hints,
+        "dormant_days": dormant_days,
+        "is_dormant": is_dormant,
+    }
+
+
+def guess_issue_subsystem(issue: dict, subsystem_keywords: dict[str, list[str]]) -> tuple[str, int]:
+    best_subsystem = "unknown"
+    best_score = 0
+
+    text = " ".join(
+        [
+            issue.get("title", ""),
+            issue.get("body") or "",
+            " ".join(label["name"] for label in issue.get("labels", [])),
+            ]
+    ).lower()
+
+    for subsystem, keywords in subsystem_keywords.items():
+        score = sum(text.count(keyword.lower()) for keyword in keywords)
+        if score > best_score:
+            best_score = score
+            best_subsystem = subsystem
+
+    return best_subsystem, best_score
+
+
+def files_for_subsystem(subsystem: str, subsystem_hits: list[dict], top_n: int = 5) -> list[str]:
+    rows = [row for row in subsystem_hits if row["subsystem"] == subsystem]
+    rows = sorted(rows, key=lambda row: int(row["count"]), reverse=True)
+    return [row["file"] for row in rows[:top_n]]
+
+
+def issue_recommendation(context_analysis: dict) -> str:
+    same_repo_prs = context_analysis["same_repo_prs"]
+    external_refs = context_analysis["external_refs"]
+    hint_count = len(context_analysis["maintainer_hints"])
+    dormant_days = context_analysis["dormant_days"]
+
+    if same_repo_prs > 0:
+        return "likely already active; inspect before contributing"
+
+    if hint_count > 0 and external_refs > 0:
+        return "strong candidate: maintainer direction + external interest"
+
+    if hint_count > 0:
+        return "good candidate: maintainer hinted direction"
+
+    if external_refs > 0:
+        return "good candidate: externally relevant"
+
+    if dormant_days is not None and dormant_days >= 120:
+        return "candidate for revival: dormant but still open"
+
+    return "inspect manually"
+
+
+def score_issue_candidate(context_analysis: dict, subsystem_match_score: int, config: dict) -> float:
+    context_scoring = config["context_scoring"]
+
+    score = 0.0
+    score += subsystem_match_score
+    score -= context_analysis["same_repo_prs"] * context_scoring["same_repo_pr_penalty"]
+    score += context_analysis["external_refs"] * context_scoring["external_reference_bonus"]
+    score += len(context_analysis["maintainer_hints"]) * context_scoring["maintainer_hint_bonus"]
+    if context_analysis["is_dormant"]:
+        score += context_scoring["dormant_bonus"]
+
+    return round(score, 2)
+
+
+def build_issue_candidates(
+        issues: list[dict],
+        issue_context: dict[int, dict],
+        subsystem_hits: list[dict],
+        config: dict,
+) -> list[dict]:
+    subsystem_keywords = config["keywords"]["subsystems"]
+    candidates: list[dict] = []
+
+    for issue in issues:
+        subsystem, subsystem_match_score = guess_issue_subsystem(issue, subsystem_keywords)
+        likely_files = files_for_subsystem(subsystem, subsystem_hits, top_n=5)
+        context_analysis = analyze_issue_context(issue, issue_context.get(issue["number"]), config)
+        local_score = score_issue_candidate(context_analysis, subsystem_match_score, config)
+        recommendation = issue_recommendation(context_analysis)
+
+        candidates.append(
+            {
+                "number": issue["number"],
+                "title": issue.get("title", ""),
+                "url": issue.get("html_url", ""),
+                "subsystem": subsystem,
+                "likely_files": likely_files,
+                "same_repo_prs": context_analysis["same_repo_prs"],
+                "external_refs": context_analysis["external_refs"],
+                "maintainer_hint_count": len(context_analysis["maintainer_hints"]),
+                "maintainer_hints": context_analysis["maintainer_hints"],
+                "dormant_days": context_analysis["dormant_days"],
+                "local_score": local_score,
+                "recommendation": recommendation,
+            }
+        )
+
+    return sorted(candidates, key=lambda row: row["local_score"], reverse=True)
 
 
 def build_churn_report(
@@ -278,15 +464,22 @@ def main() -> None:
         config,
     )
     churn_report = build_churn_report(file_churn, bugfix_churn, todo_hits)
+    issue_candidates = build_issue_candidates(
+        issues,
+        issue_context,
+        subsystem_hits,
+        config,
+    )
 
     write_json(data_dir / "topic_map.json", topic_map)
     write_json(data_dir / "issue_clusters.json", issue_clusters)
     write_json(data_dir / "churn_report.json", churn_report)
+    write_json(data_dir / "issue_candidates.json", issue_candidates)
 
     print(f"saved {len(topic_map)} topic-map entries")
     print(f"saved {len(issue_clusters)} issue-cluster entries")
     print(f"saved {len(churn_report)} churn-report entries")
-
+    print(f"saved {len(issue_candidates)} issue-candidate entries")
 
 if __name__ == "__main__":
     main()

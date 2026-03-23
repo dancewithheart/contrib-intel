@@ -115,8 +115,8 @@ context_rules:
 
   dormant_days_threshold: 120
 
-  context_scoring:
-    same_repo_pr_penalty: 4.0
-    external_reference_bonus: 3.0
-    maintainer_hint_bonus: 4.0
-    dormant_bonus: 2.0
+context_scoring:
+  same_repo_pr_penalty: 4.0
+  external_reference_bonus: 3.0
+  maintainer_hint_bonus: 4.0
+  dormant_bonus: 2.0
