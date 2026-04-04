@@ -1,0 +1,120 @@
+repo: cardano-ledger
+owner: IntersectMBO
+name: cardano-ledger
+
+paths:
+  local_repo: ~/cardano-ledger
+  data_dir: data/cardano-ledger
+  report_path: reports/cardano-ledger-opportunities.md
+
+github:
+  per_page: 100
+  max_issues: 250
+  max_prs: 250
+  use_cache: true
+  max_issue_context: 20
+
+issue_queries:
+  state: open
+  labels_include: []
+  labels_exclude:
+    - question
+
+keywords:
+  subsystems:
+    era_translation:
+      - "era"
+      - "translation"
+      - "upgrade"
+      - "hard fork"
+      - "Mary"
+      - "Alonzo"
+      - "Babbage"
+      - "Conway"
+    utxo:
+      - "UTxO"
+      - "utxo"
+      - "TxOut"
+      - "TxIn"
+      - "balance"
+      - "fees"
+    governance:
+      - "governance"
+      - "DRep"
+      - "committee"
+      - "vote"
+      - "proposal"
+      - "Conway"
+    tests:
+      - "property"
+      - "QuickCheck"
+      - "hedgehog"
+      - "golden"
+      - "spec"
+      - "conformance"
+    serialization:
+      - "CBOR"
+      - "ToCBOR"
+      - "FromCBOR"
+      - "encoding"
+      - "decoding"
+
+  grep_patterns:
+    - "TODO"
+    - "FIXME"
+    - "XXX"
+    - "HACK"
+    - "should not happen"
+    - "work around"
+    - "re-enable"
+    - "deprecated"
+
+filters:
+  include_paths:
+    - "eras/"
+    - "libs/"
+    - "test/"
+  exclude_paths:
+    - "dist-newstyle/"
+    - ".stack-work/"
+    - "site/"
+    - "scripts/"
+  exclude_file_names: []
+  exclude_suffixes:
+    - ".log"
+    - ".md"
+
+scoring:
+  issue_match: 3.0
+  repo_signal: 2.0
+  churn: 1.5
+  bugfix_churn: 2.5
+  dormant_bonus: 2.0
+  personal_interest_bonus: 1.5
+
+ranking_rules:
+  boost_if_comment_mentions:
+    - "regression"
+    - "conformance"
+    - "property"
+    - "era transition"
+
+context_rules:
+  maintainer_handles:
+    - "alexdrocks"
+    - "nfrisby"
+    - "michaelpj"
+    - "mkkovac"
+  maintainer_hint_phrases:
+    - "we should"
+    - "would be nice"
+    - "follow-up"
+    - "good first issue"
+    - "another instance of"
+    - "it would be sensible"
+  dormant_days_threshold: 120
+context_scoring:
+  same_repo_pr_penalty: 4.0
+  external_reference_bonus: 3.0
+  maintainer_hint_bonus: 4.0
+  dormant_bonus: 2.0

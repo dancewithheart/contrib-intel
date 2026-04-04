@@ -3,7 +3,7 @@ owner: scala
 name: scala3
 
 paths:
-  local_repo: /home/piter/scala3
+  local_repo: ~/scala3
   data_dir: data/scala3
   report_path: reports/scala3-opportunities.md
 
@@ -12,7 +12,7 @@ github:
   max_issues: 300
   max_prs: 300
   use_cache: true
-  max_issue_context: 20
+  max_issue_context: 30
 
 issue_queries:
   state: open

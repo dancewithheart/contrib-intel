@@ -3,7 +3,7 @@ owner: input-output-hk
 name: io-sim
 
 paths:
-  local_repo: /home/piter/io-sim
+  local_repo: ~/io-sim
   data_dir: data/io-sim
   report_path: reports/io-sim-opportunities.md
 
@@ -117,7 +117,6 @@ context_rules:
     - "another instance of"
     - "it would be sensible"
   dormant_days_threshold: 120
-
 context_scoring:
   same_repo_pr_penalty: 4.0
   external_reference_bonus: 3.0

@@ -1,0 +1,132 @@
+repo: ouroboros-consensus
+owner: IntersectMBO
+name: ouroboros-consensus
+
+paths:
+  local_repo: ~/ouroboros-consensus
+  data_dir: data/ouroboros-consensus
+  report_path: reports/ouroboros-consensus-opportunities.md
+
+github:
+  per_page: 100
+  max_issues: 350
+  max_prs: 250
+  use_cache: true
+  max_issue_context: 20
+
+issue_queries:
+  state: open
+  labels_include: []
+  labels_exclude:
+    - question
+
+keywords:
+  subsystems:
+    chain_sync:
+      - "ChainSync"
+      - "chain sync"
+      - "rollback"
+      - "header validation"
+      - "header protocol version"
+      - "BlockFetch"
+    hard_forks:
+      - "HardFork"
+      - "HFC"
+      - "reconstructSummary"
+      - "cross-era"
+      - "era transition"
+      - "wall clock"
+      - "long-range HFC"
+      - "TraceNoLedgerView"
+    ledger_db:
+      - "LedgerDB"
+      - "ChainDB"
+      - "LgrDB"
+      - "SnapshotPolicy"
+      - "ImmutableDB"
+      - "VolatileDB"
+      - "db-analyser"
+      - "LMDB"
+      - "ledger snapshot"
+      - "ImmDB"
+    network:
+      - "mini-protocol"
+      - "ChainSync"
+      - "LedgerPeersConsensusInterface"
+      - "NodeToNode"
+      - "NodeToClient"
+      - "codec"
+      - "peer snapshots"
+      - "downstream server"
+    tests:
+      - "q-s-m"
+      - "QSM"
+      - "quickcheck-dynamic"
+      - "ChainDB q-s-m"
+      - "ImmDB QSM"
+      - "Iterator"
+      - "Ledger tables"
+      - "range reads"
+      - "parallel actions"
+      - "GetLedgerDB"
+
+  grep_patterns:
+    - "TODO"
+    - "FIXME"
+    - "XXX"
+    - "HACK"
+    - "should not happen"
+    - "work around"
+    - "re-enable"
+    - "invariant"
+
+filters:
+  include_paths:
+    - "ouroboros-consensus/src/"
+    - "ouroboros-consensus/test/"
+    - "ouroboros-consensus-diffusion/src/"
+    - "ouroboros-consensus-diffusion/test/"
+  exclude_paths:
+    - "dist-newstyle/"
+    - ".stack-work/"
+    - "docs/"
+  exclude_file_names: []
+  exclude_suffixes:
+    - ".log"
+    - ".md"
+
+context_rules:
+  maintainer_handles:
+    - "edsko"
+    - "konn"
+    - "michaelpj"
+    - "jakub"
+  maintainer_hint_phrases:
+    - "we should"
+    - "would be nice"
+    - "follow-up"
+    - "good first issue"
+    - "another instance of"
+    - "it would be sensible"
+  dormant_days_threshold: 120
+
+context_scoring:
+  same_repo_pr_penalty: 4.0
+  external_reference_bonus: 3.0
+  maintainer_hint_bonus: 4.0
+  dormant_bonus: 2.0
+
+scoring:
+  issue_match: 3.0
+  repo_signal: 2.0
+  churn: 1.5
+  bugfix_churn: 2.5
+  dormant_bonus: 2.0
+  personal_interest_bonus: 1.5
+
+ranking_rules:
+  boost_if_comment_mentions:
+    - "regression"
+    - "invariant"
+    - "simulation"
+    - "hard fork"

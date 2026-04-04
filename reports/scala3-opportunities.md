@@ -11,8 +11,8 @@ Use the sections below differently:
 
 Most promising current issue-cluster directions:
 
-1. **Explicit Nulls** — issues #25565, #25551, #25271; files `tests/run/bridges.scala`, `compiler/src/dotty/tools/dotc/typer/Nullables.scala`
-2. **Typer** — issues #25565, #25557, #25555; files `compiler/src/dotty/tools/dotc/typer/Typer.scala`, `compiler/src/dotty/tools/dotc/core/Definitions.scala`
+1. **Explicit Nulls** — issues #25624, #25565, #25551; files `tests/run/bridges.scala`, `compiler/src/dotty/tools/dotc/typer/Nullables.scala`
+2. **Typer** — issues #25636, #25565, #25557; files `compiler/src/dotty/tools/dotc/typer/Typer.scala`, `compiler/src/dotty/tools/dotc/core/Definitions.scala`
 3. **Match Types** — issues #25341, #25246, #25129; files `compiler/src/dotty/tools/dotc/core/Types.scala`, `compiler/src/dotty/tools/dotc/semanticdb/generated/Type.scala`
 
 Top concrete issue candidates:
@@ -28,16 +28,16 @@ Top concrete issue candidates:
 ### Explicit Nulls
 
 - subsystem: `explicit_nulls`
-- overall score: **10251.0**
+- overall score: **10255.5**
 - issue count: 15
 - issues:
+  - [#25624 — Scoverage & Captures interaction during separation: broken assumptions about each other cause failures](https://github.com/scala/scala3/issues/25624)
   - [#25565 — Regression for deriviation of enums/union types in `taig/mapping`](https://github.com/scala/scala3/issues/25565)
   - [#25551 — Repl returns null when using io.StdIn.readLine()](https://github.com/scala/scala3/issues/25551)
   - [#25271 — Runtime errors when implementing non-sealed java interface](https://github.com/scala/scala3/issues/25271)
   - [#25239 — False `Unreachable case except for null` warning in `inline def` with a match expression with type params](https://github.com/scala/scala3/issues/25239)
   - [#25183 — Compiler crash using `private var` constructor parameter and user-defined setter for field of the same name](https://github.com/scala/scala3/issues/25183)
   - [#25163 — Using value before definition results in null without warning](https://github.com/scala/scala3/issues/25163)
-  - [#25162 — Null not removed when using .nn on a opaque type union with Null](https://github.com/scala/scala3/issues/25162)
   - [#24979 — "Unreachable case except for null" with `Free` and wildcard type](https://github.com/scala/scala3/issues/24979)
   - [#24899 — Unsound path-dependent types without initialization checking](https://github.com/scala/scala3/issues/24899)
   - [#24770 — Cannot assign nullable type parameter to generic types from Java under explicit nulls](https://github.com/scala/scala3/issues/24770)
@@ -50,7 +50,7 @@ Top concrete issue candidates:
   - `compiler/src/dotty/tools/dotc/core/ImplicitNullInterop.scala`
 
 - linkage/context signals:
-  - same-repo PR links: 0
+  - same-repo PR links: 1
   - external repo references: 0
   - maintainer hint comments: 0
   - dormant issues: 0
@@ -58,19 +58,19 @@ Top concrete issue candidates:
 ### Typer
 
 - subsystem: `typer`
-- overall score: **9837.5**
-- issue count: 36
+- overall score: **9865.0**
+- issue count: 35
 - issues:
+  - [#25636 — MatchError PolyType during pickling](https://github.com/scala/scala3/issues/25636)
   - [#25565 — Regression for deriviation of enums/union types in `taig/mapping`](https://github.com/scala/scala3/issues/25565)
   - [#25557 — Path dependent type broken in secondary param list when args are reordered](https://github.com/scala/scala3/issues/25557)
-  - [#25555 — Coverage instrumentation widens singleton types during argument lifting, causing Ycheck failure](https://github.com/scala/scala3/issues/25555)
   - [#25541 — `-Xcheck-macros` regression in `upickle` dependent projects](https://github.com/scala/scala3/issues/25541)
-  - [#25534 — Typer regression in `atnos-org/eff`](https://github.com/scala/scala3/issues/25534)
   - [#25504 — Figure out the exact semantics of `apply` in edge cases](https://github.com/scala/scala3/issues/25504)
   - [#25493 — Member/extension defs as patterns](https://github.com/scala/scala3/issues/25493)
   - [#25491 — CC retyper infers Nothing from intersection with singleton type](https://github.com/scala/scala3/issues/25491)
   - [#25447 — Presentation compiler issues with Scala JS](https://github.com/scala/scala3/issues/25447)
   - [#25408 — Dotty allows compiling `scala.Int` but crashes during bytecode generation](https://github.com/scala/scala3/issues/25408)
+  - [#25407 — separation checking: static objects allow to reuse consumed values (i.e. capture {any} is allowed)](https://github.com/scala/scala3/issues/25407)
 
 - top files:
   - `compiler/src/dotty/tools/dotc/typer/Typer.scala`
@@ -80,7 +80,7 @@ Top concrete issue candidates:
   - `compiler/src/dotty/tools/dotc/core/Contexts.scala`
 
 - linkage/context signals:
-  - same-repo PR links: 1
+  - same-repo PR links: 0
   - external repo references: 0
   - maintainer hint comments: 0
   - dormant issues: 0
@@ -92,7 +92,7 @@ Top concrete issue candidates:
 ### Match Types
 
 - subsystem: `match_types`
-- overall score: **8973.0**
+- overall score: **8971.5**
 - issue count: 7
 - issues:
   - [#25341 — Should `ConstFold` use `TypeComparer.constValue`?](https://github.com/scala/scala3/issues/25341)
@@ -114,37 +114,37 @@ Top concrete issue candidates:
   - same-repo PR links: 0
   - external repo references: 0
   - maintainer hint comments: 0
-  - dormant issues: 0
+  - dormant issues: 1
 
 ### Diagnostics
 
 - subsystem: `diagnostics`
-- overall score: **2911.0**
-- issue count: 48
+- overall score: **2969.0**
+- issue count: 47
 - issues:
+  - [#25647 — Scaladoc/Snippet checking should support expected diagnostics like the compilation test suite](https://github.com/scala/scala3/issues/25647)
+  - [#25643 — CC: Accessing Shared State in Nested Classes](https://github.com/scala/scala3/issues/25643)
+  - [#25595 — Fancy type ascription to pattern should also warn in valdef](https://github.com/scala/scala3/issues/25595)
   - [#25594 — Extension method overload resolution picks wrong candidate when lambda parameter type must be inferred](https://github.com/scala/scala3/issues/25594)
   - [#25590 — Inference of boundary/break style control abstractions broken unless via direct method reference](https://github.com/scala/scala3/issues/25590)
   - [#25585 — -Ysafe-init-global test warns pos/LazyList.scala](https://github.com/scala/scala3/issues/25585)
-  - [#25571 — "-Werror" with "-Wunused:nowarn" does not work](https://github.com/scala/scala3/issues/25571)
-  - [#25553 — Unable to suppress discarded non-unit warning](https://github.com/scala/scala3/issues/25553)
-  - [#25544 — `@unchecked` tuple destructuring is now ignored](https://github.com/scala/scala3/issues/25544)
-  - [#25534 — Typer regression in `atnos-org/eff`](https://github.com/scala/scala3/issues/25534)
   - [#25508 — REPL still prints LazyVal warnings (presumably because of fansi+pprint)](https://github.com/scala/scala3/issues/25508)
   - [#25493 — Member/extension defs as patterns](https://github.com/scala/scala3/issues/25493)
   - [#25465 — Capture checking breaks the REPL/scala-cli `:type` command](https://github.com/scala/scala3/issues/25465)
+  - [#25392 — Duplicate Symbols created while compiling the standard library.](https://github.com/scala/scala3/issues/25392)
 
 - top files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - linkage/context signals:
-  - same-repo PR links: 3
+  - same-repo PR links: 2
   - external repo references: 0
   - maintainer hint comments: 0
-  - dormant issues: 0
+  - dormant issues: 2
 
 ### Namer
 
@@ -194,7 +194,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 94
+  - dormant days: 101
 
 ### #25204 — no owner from  <none>/ <none> in emb.apply
 
@@ -217,7 +217,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 35
+  - dormant days: 42
 
 ### #24719 — Assertion failure in `LazyAnnotation.tree`
 
@@ -240,7 +240,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 103
+  - dormant days: 110
 
 ### #24824 — Crash during type inference after failed implicit search: assertion failed: `wildApprox` failed to remove uninstantiated T
 
@@ -263,7 +263,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 69
+  - dormant days: 76
 
 ### #25447 — Presentation compiler issues with Scala JS
 
@@ -286,7 +286,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 17
+  - dormant days: 24
 
 ### #25244 — Crash in `tpd.singleton` on `PreviousErrorType` during error recovery (inline match + quoted pattern with unresolved import)
 
@@ -309,7 +309,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 33
+  - dormant days: 0
 
 ### #25246 — Crash: `AssertionError` in `TypeOps.dominators` with complex context bounds and quoted expression
 
@@ -332,7 +332,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 39
+  - dormant days: 46
 
 ### #25170 — Internal error when using `-Ysafe-init-global` with basic ZIO
 
@@ -355,7 +355,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 47
+  - dormant days: 54
 
 ### #24770 — Cannot assign nullable type parameter to generic types from Java under explicit nulls
 
@@ -378,7 +378,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 94
+  - dormant days: 101
 
 ### #24596 — Runtime regression in `getkyo/kyo` due to changes in Quotes API semantics
 
@@ -401,37 +401,14 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 56
+  - dormant days: 63
 
-### #25162 — Null not removed when using .nn on a opaque type union with Null
-
-- subsystem guess: `explicit_nulls`
-- local score: **10.0**
-- recommendation: inspect manually
-- issue url: https://github.com/scala/scala3/issues/25162
-
-- likely files:
-  - `tests/run/bridges.scala`
-  - `compiler/src/dotty/tools/dotc/typer/Nullables.scala`
-  - `compiler/src/dotty/tools/dotc/core/Types.scala`
-  - `compiler/src/dotty/tools/dotc/typer/Typer.scala`
-  - `compiler/src/dotty/tools/dotc/core/ImplicitNullInterop.scala`
-
-- contribution signals:
-  - already actively worked on in same repo? no
-  - same-repo PR links: 0
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 39
-
-### #25555 — Coverage instrumentation widens singleton types during argument lifting, causing Ycheck failure
+### #25636 — MatchError PolyType during pickling
 
 - subsystem guess: `typer`
-- local score: **9.0**
-- recommendation: likely already active; inspect before contributing
-- issue url: https://github.com/scala/scala3/issues/25555
+- local score: **8.0**
+- recommendation: inspect manually
+- issue url: https://github.com/scala/scala3/issues/25636
 
 - likely files:
   - `compiler/src/dotty/tools/dotc/typer/Typer.scala`
@@ -441,13 +418,13 @@ Concrete issues enriched with contribution signals.
   - `compiler/src/dotty/tools/dotc/core/Contexts.scala`
 
 - contribution signals:
-  - already actively worked on in same repo? yes
-  - same-repo PR links: 1
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
   - referenced by external repos? no
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 5
+  - dormant days: 0
 
 ### #25055 — REPL has syntax warning crosstalk
 
@@ -459,8 +436,8 @@ Concrete issues enriched with contribution signals.
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -470,7 +447,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 60
+  - dormant days: 67
 
 ### #24771 — -Wconf:src source path conversion to URI breaks Windows paths
 
@@ -482,8 +459,8 @@ Concrete issues enriched with contribution signals.
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -493,7 +470,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 95
+  - dormant days: 102
 
 ### #24653 — Aliased Unit improperly boxed
 
@@ -505,8 +482,8 @@ Concrete issues enriched with contribution signals.
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -516,7 +493,30 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 109
+  - dormant days: 116
+
+### #24506 — Error message "No ClassTag available for T" not helpful on what to do to fix it and has no reflect.ClassTag to show where it is
+
+- subsystem guess: `diagnostics`
+- local score: **8.0**
+- recommendation: candidate for revival: dormant but still open
+- issue url: https://github.com/scala/scala3/issues/24506
+
+- likely files:
+  - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
+  - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
+  - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
+  - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
+
+- contribution signals:
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
+  - referenced by external repos? no
+  - external references: 0
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 126
 
 ### #25508 — REPL still prints LazyVal warnings (presumably because of fansi+pprint)
 
@@ -528,8 +528,8 @@ Concrete issues enriched with contribution signals.
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -539,7 +539,23 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 4
+  - dormant days: 11
+
+### #25617 — Release procedure 3.8.3
+
+- subsystem guess: `unknown`
+- local score: **6.0**
+- recommendation: good candidate: externally relevant
+- issue url: https://github.com/scala/scala3/issues/25617
+
+- contribution signals:
+  - already actively worked on in same repo? no
+  - same-repo PR links: 0
+  - referenced by external repos? yes
+  - external references: 2
+  - maintainer hinted direction? no
+  - maintainer-hint count: 0
+  - dormant days: 0
 
 ### #24760 — Overriding with an inline method and inline match is unsound
 
@@ -562,20 +578,20 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 67
+  - dormant days: 75
 
-### #24506 — Error message "No ClassTag available for T" not helpful on what to do to fix it and has no reflect.ClassTag to show where it is
+### #25647 — Scaladoc/Snippet checking should support expected diagnostics like the compilation test suite
 
 - subsystem guess: `diagnostics`
-- local score: **6.0**
+- local score: **5.0**
 - recommendation: inspect manually
-- issue url: https://github.com/scala/scala3/issues/24506
+- issue url: https://github.com/scala/scala3/issues/25647
 
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -585,7 +601,7 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 119
+  - dormant days: 0
 
 ### #25585 — -Ysafe-init-global test warns pos/LazyList.scala
 
@@ -597,8 +613,8 @@ Concrete issues enriched with contribution signals.
 - likely files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 - contribution signals:
@@ -608,90 +624,67 @@ Concrete issues enriched with contribution signals.
   - external references: 0
   - maintainer hinted direction? no
   - maintainer-hint count: 0
-  - dormant days: 3
-
-### #25565 — Regression for deriviation of enums/union types in `taig/mapping`
-
-- subsystem guess: `typer`
-- local score: **5.0**
-- recommendation: inspect manually
-- issue url: https://github.com/scala/scala3/issues/25565
-
-- likely files:
-  - `compiler/src/dotty/tools/dotc/typer/Typer.scala`
-  - `compiler/src/dotty/tools/dotc/core/Definitions.scala`
-  - `compiler/test/dotty/tools/dotc/transform/LazyValsTest.scala`
-  - `compiler/src/dotty/tools/dotc/core/Types.scala`
-  - `compiler/src/dotty/tools/dotc/core/Contexts.scala`
-
-- contribution signals:
-  - already actively worked on in same repo? no
-  - same-repo PR links: 0
-  - referenced by external repos? no
-  - external references: 0
-  - maintainer hinted direction? no
-  - maintainer-hint count: 0
-  - dormant days: 4
+  - dormant days: 6
 
 ## Churn / test investment report
 
 Top files where tests, refactors, or smaller components may pay off:
 
-- `compiler/src/dotty/tools/dotc/typer/Typer.scala` — churn=1637, bugfix_churn=471, todo_hits=12
-- `compiler/src/dotty/tools/dotc/parsing/Parsers.scala` — churn=1000, bugfix_churn=295, todo_hits=2
-- `compiler/src/dotty/tools/dotc/core/Types.scala` — churn=1242, bugfix_churn=282, todo_hits=9
-- `compiler/src/dotty/tools/dotc/typer/Applications.scala` — churn=647, bugfix_churn=194, todo_hits=2
-- `compiler/src/dotty/tools/dotc/core/TypeComparer.scala` — churn=719, bugfix_churn=178, todo_hits=2
-- `compiler/src/dotty/tools/dotc/typer/Implicits.scala` — churn=593, bugfix_churn=177, todo_hits=1
-- `compiler/src/dotty/tools/dotc/ast/Desugar.scala` — churn=635, bugfix_churn=175, todo_hits=4
+- `compiler/src/dotty/tools/dotc/typer/Typer.scala` — churn=1640, bugfix_churn=472, todo_hits=12
+- `compiler/src/dotty/tools/dotc/parsing/Parsers.scala` — churn=1001, bugfix_churn=295, todo_hits=2
+- `compiler/src/dotty/tools/dotc/core/Types.scala` — churn=1243, bugfix_churn=282, todo_hits=10
+- `compiler/src/dotty/tools/dotc/typer/Applications.scala` — churn=650, bugfix_churn=194, todo_hits=2
+- `compiler/src/dotty/tools/dotc/typer/Implicits.scala` — churn=596, bugfix_churn=178, todo_hits=1
+- `compiler/src/dotty/tools/dotc/core/TypeComparer.scala` — churn=716, bugfix_churn=175, todo_hits=2
+- `compiler/src/dotty/tools/dotc/ast/Desugar.scala` — churn=636, bugfix_churn=175, todo_hits=4
 - `compiler/src/dotty/tools/dotc/typer/Checking.scala` — churn=529, bugfix_churn=160, todo_hits=1
 - `compiler/src/dotty/tools/dotc/reporting/diagnostic/messages.scala` — churn=264, bugfix_churn=153, todo_hits=0
 - `compiler/test/dotty/tools/dotc/CompilationTests.scala` — churn=454, bugfix_churn=138, todo_hits=1
-- `compiler/src/dotty/tools/dotc/core/SymDenotations.scala` — churn=586, bugfix_churn=136, todo_hits=2
-- `compiler/src/dotty/tools/dotc/transform/patmat/Space.scala` — churn=369, bugfix_churn=133, todo_hits=0
+- `compiler/src/dotty/tools/dotc/core/SymDenotations.scala` — churn=588, bugfix_churn=137, todo_hits=2
+- `compiler/src/dotty/tools/dotc/transform/patmat/Space.scala` — churn=370, bugfix_churn=133, todo_hits=0
 - `compiler/src/dotty/tools/dotc/typer/Namer.scala` — churn=566, bugfix_churn=128, todo_hits=4
-- `compiler/src/dotty/tools/dotc/reporting/messages.scala` — churn=306, bugfix_churn=126, todo_hits=1
-- `compiler/src/dotty/tools/dotc/core/Definitions.scala` — churn=902, bugfix_churn=125, todo_hits=5
+- `compiler/src/dotty/tools/dotc/reporting/messages.scala` — churn=309, bugfix_churn=127, todo_hits=1
+- `compiler/src/dotty/tools/dotc/core/Definitions.scala` — churn=907, bugfix_churn=126, todo_hits=5
 
 ## Topic map
 
 ### Diagnostics
 
-- issue count: 48
+- issue count: 47
 - issues:
+  - [#25647 — Scaladoc/Snippet checking should support expected diagnostics like the compilation test suite](https://github.com/scala/scala3/issues/25647)
+  - [#25643 — CC: Accessing Shared State in Nested Classes](https://github.com/scala/scala3/issues/25643)
+  - [#25595 — Fancy type ascription to pattern should also warn in valdef](https://github.com/scala/scala3/issues/25595)
   - [#25594 — Extension method overload resolution picks wrong candidate when lambda parameter type must be inferred](https://github.com/scala/scala3/issues/25594)
   - [#25590 — Inference of boundary/break style control abstractions broken unless via direct method reference](https://github.com/scala/scala3/issues/25590)
   - [#25585 — -Ysafe-init-global test warns pos/LazyList.scala](https://github.com/scala/scala3/issues/25585)
-  - [#25571 — "-Werror" with "-Wunused:nowarn" does not work](https://github.com/scala/scala3/issues/25571)
-  - [#25553 — Unable to suppress discarded non-unit warning](https://github.com/scala/scala3/issues/25553)
-  - [#25544 — `@unchecked` tuple destructuring is now ignored](https://github.com/scala/scala3/issues/25544)
-  - [#25534 — Typer regression in `atnos-org/eff`](https://github.com/scala/scala3/issues/25534)
   - [#25508 — REPL still prints LazyVal warnings (presumably because of fansi+pprint)](https://github.com/scala/scala3/issues/25508)
   - [#25493 — Member/extension defs as patterns](https://github.com/scala/scala3/issues/25493)
   - [#25465 — Capture checking breaks the REPL/scala-cli `:type` command](https://github.com/scala/scala3/issues/25465)
+  - [#25392 — Duplicate Symbols created while compiling the standard library.](https://github.com/scala/scala3/issues/25392)
 
 
 - representative files:
   - `compiler/src/dotty/tools/dotc/transform/init/Objects.scala`
   - `compiler/test/dotty/tools/dotc/config/ScalaSettingsTests.scala`
-  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/reporting/Reporter.scala`
+  - `compiler/test/dotty/tools/vulpix/ParallelTesting.scala`
   - `compiler/src/dotty/tools/dotc/config/ScalaSettings.scala`
 
 ### Typer
 
-- issue count: 36
+- issue count: 35
 - issues:
+  - [#25636 — MatchError PolyType during pickling](https://github.com/scala/scala3/issues/25636)
   - [#25565 — Regression for deriviation of enums/union types in `taig/mapping`](https://github.com/scala/scala3/issues/25565)
   - [#25557 — Path dependent type broken in secondary param list when args are reordered](https://github.com/scala/scala3/issues/25557)
-  - [#25555 — Coverage instrumentation widens singleton types during argument lifting, causing Ycheck failure](https://github.com/scala/scala3/issues/25555)
   - [#25541 — `-Xcheck-macros` regression in `upickle` dependent projects](https://github.com/scala/scala3/issues/25541)
-  - [#25534 — Typer regression in `atnos-org/eff`](https://github.com/scala/scala3/issues/25534)
   - [#25504 — Figure out the exact semantics of `apply` in edge cases](https://github.com/scala/scala3/issues/25504)
   - [#25493 — Member/extension defs as patterns](https://github.com/scala/scala3/issues/25493)
   - [#25491 — CC retyper infers Nothing from intersection with singleton type](https://github.com/scala/scala3/issues/25491)
   - [#25447 — Presentation compiler issues with Scala JS](https://github.com/scala/scala3/issues/25447)
   - [#25408 — Dotty allows compiling `scala.Int` but crashes during bytecode generation](https://github.com/scala/scala3/issues/25408)
+  - [#25407 — separation checking: static objects allow to reuse consumed values (i.e. capture {any} is allowed)](https://github.com/scala/scala3/issues/25407)
 
 
 - representative files:
@@ -705,13 +698,13 @@ Top files where tests, refactors, or smaller components may pay off:
 
 - issue count: 15
 - issues:
+  - [#25624 — Scoverage & Captures interaction during separation: broken assumptions about each other cause failures](https://github.com/scala/scala3/issues/25624)
   - [#25565 — Regression for deriviation of enums/union types in `taig/mapping`](https://github.com/scala/scala3/issues/25565)
   - [#25551 — Repl returns null when using io.StdIn.readLine()](https://github.com/scala/scala3/issues/25551)
   - [#25271 — Runtime errors when implementing non-sealed java interface](https://github.com/scala/scala3/issues/25271)
   - [#25239 — False `Unreachable case except for null` warning in `inline def` with a match expression with type params](https://github.com/scala/scala3/issues/25239)
   - [#25183 — Compiler crash using `private var` constructor parameter and user-defined setter for field of the same name](https://github.com/scala/scala3/issues/25183)
   - [#25163 — Using value before definition results in null without warning](https://github.com/scala/scala3/issues/25163)
-  - [#25162 — Null not removed when using .nn on a opaque type union with Null](https://github.com/scala/scala3/issues/25162)
   - [#24979 — "Unreachable case except for null" with `Free` and wildcard type](https://github.com/scala/scala3/issues/24979)
   - [#24899 — Unsound path-dependent types without initialization checking](https://github.com/scala/scala3/issues/24899)
   - [#24770 — Cannot assign nullable type parameter to generic types from Java under explicit nulls](https://github.com/scala/scala3/issues/24770)
