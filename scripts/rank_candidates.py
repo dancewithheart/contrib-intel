@@ -9,14 +9,19 @@ from pathlib import Path
 from scripts.common import days_since, load_config, read_csv, read_json, write_json
 
 
-def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
-    text = " ".join(
+def issue_search_text(issue: dict) -> str:
+    labels = " ".join((label.get("name") or "") for label in issue.get("labels", []))
+    return " ".join(
         [
             issue.get("title", ""),
             issue.get("body") or "",
-            " ".join(label["name"] for label in issue.get("labels", [])),
+            labels,
             ]
     ).lower()
+
+
+def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
+    text = issue_search_text(issue)
     return any(keyword.lower() in text for keyword in keywords)
 
 
@@ -236,89 +241,11 @@ def build_issue_clusters(
     return sorted(clusters, key=lambda c: c["scores"]["overall"], reverse=True)
 
 
-def issue_matches_keywords(issue: dict, keywords: list[str]) -> bool:
-    text = " ".join(
-        [
-            issue.get("title", ""),
-            issue.get("body") or "",
-            " ".join(label["name"] for label in issue.get("labels", [])),
-            ]
-    ).lower()
-    return any(keyword.lower() in text for keyword in keywords)
-
-
-def load_issue_context(data_dir: Path) -> dict[int, dict]:
-    index = read_json(data_dir / "issue_context_index.json", [])
-    result: dict[int, dict] = {}
-
-    for row in index:
-        number = row["number"]
-        comments = read_json(Path(row["comments_path"]), [])
-        timeline = read_json(Path(row["timeline_path"]), [])
-        result[number] = {
-            "comments": comments,
-            "timeline": timeline,
-        }
-
-    return result
-
-
-def analyze_issue_context(issue: dict, context: dict | None, config: dict) -> dict:
-    rules = config["context_rules"]
-    maintainer_handles = {x.lower() for x in rules.get("maintainer_handles", [])}
-    hint_phrases = [x.lower() for x in rules.get("maintainer_hint_phrases", [])]
-    dormant_days_threshold = rules.get("dormant_days_threshold", 120)
-
-    same_repo_prs = 0
-    external_refs = 0
-    maintainer_hints: list[str] = []
-
-    if context:
-        for event in context.get("timeline", []):
-            if event.get("event") == "cross-referenced":
-                source = event.get("source") or {}
-                source_issue = source.get("issue") or {}
-                repo = (source_issue.get("repository") or {}).get("full_name")
-                is_pr = "pull_request" in source_issue
-
-                if is_pr and repo == f"{config['owner']}/{config['name']}":
-                    same_repo_prs += 1
-                elif repo and repo != f"{config['owner']}/{config['name']}":
-                    external_refs += 1
-
-        for comment in context.get("comments", []):
-            user = ((comment.get("user") or {}).get("login") or "").lower()
-            body = (comment.get("body") or "").lower()
-
-            if user in maintainer_handles:
-                for phrase in hint_phrases:
-                    if phrase in body:
-                        maintainer_hints.append(phrase)
-                        break
-
-    dormant_days = days_since(issue.get("updated_at"))
-    is_dormant = dormant_days is not None and dormant_days >= dormant_days_threshold
-
-    return {
-        "same_repo_prs": same_repo_prs,
-        "external_refs": external_refs,
-        "maintainer_hints": maintainer_hints,
-        "dormant_days": dormant_days,
-        "is_dormant": is_dormant,
-    }
-
-
 def guess_issue_subsystem(issue: dict, subsystem_keywords: dict[str, list[str]]) -> tuple[str, int]:
     best_subsystem = "unknown"
     best_score = 0
 
-    text = " ".join(
-        [
-            issue.get("title", ""),
-            issue.get("body") or "",
-            " ".join(label["name"] for label in issue.get("labels", [])),
-            ]
-    ).lower()
+    text = issue_search_text(issue)
 
     for subsystem, keywords in subsystem_keywords.items():
         score = sum(text.count(keyword.lower()) for keyword in keywords)
