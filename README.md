@@ -191,8 +191,3 @@ mypy scripts
   the maintainers' current priorities.
 - The final step must remain human: read the issue, search recent pull requests,
   reproduce the problem, and discuss the intended change when appropriate.
-
-## License
-
-No license has been added yet. Add one before inviting outside contributions or
-redistribution.
