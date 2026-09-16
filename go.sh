@@ -1,29 +1,39 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-#export OS_PROJECT=io-sim
-export OS_PROJECT=agda
-#export OS_PROJECT=cardano-ledger
-#export OS_PROJECT=ouroboros-consensus
-export FILE=configs/${OS_PROJECT}.yaml
+project="${1:-scala3}"
+refresh="${2:-}"
+config="configs/${project}.yaml"
 
-if [[ ! -f "$FILE" ]]; then
-  echo "Config not found: $FILE"
+if [[ ! -f "$config" ]]; then
+  echo "Config not found: $config"
   echo "Available configs:"
-  ls configs/*.yaml
+  find configs -maxdepth 1 -name '*.yaml' -printf '  %f\n' | sort
   exit 1
 fi
 
-python3 -m scripts.scan_repo_signals "$FILE"
-python3 -m scripts.mine_git_history "$FILE"
-python3 -m scripts.rank_candidates "$FILE"
-
-python3 -m scripts.build_report "$FILE"
-export REPORT=reports/${OS_PROJECT}-opportunities.md
-
-if [[ -f "$REPORT" ]]; then
-  cat "$REPORT"
-else
-  echo "Report not found: $REPORT"
+if [[ -n "$refresh" && "$refresh" != "--refresh" ]]; then
+  echo "usage: ./go.sh [project] [--refresh]"
   exit 1
 fi
+
+refresh_args=()
+if [[ "$refresh" == "--refresh" ]]; then
+  refresh_args+=("--refresh")
+fi
+
+python3 -m scripts.fetch_github_issues "$config" "${refresh_args[@]}"
+python3 -m scripts.fetch_issue_context "$config" "${refresh_args[@]}"
+python3 -m scripts.scan_repo_signals "$config"
+python3 -m scripts.mine_git_history "$config"
+python3 -m scripts.rank_candidates "$config"
+python3 -m scripts.build_report "$config"
+python3 -m scripts.analyze_data "$config"
+
+report="reports/${project}-opportunities.md"
+analysis="reports/${project}-analysis.md"
+
+printf 'Generated %s\n' "$report"
+printf 'Generated %s\n' "$analysis"
+printf '\nCandidate sample:\n'
+sed -n '/Top concrete issue candidates:/,+9p' "$report"
