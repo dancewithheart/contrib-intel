@@ -13,7 +13,13 @@ from scripts.common import (
 )
 
 
-TEXT_FILE_EXTENSIONS = {
+DEFAULT_TEXT_FILE_EXTENSIONS = {
+    ".hs",
+    ".lhs",
+    ".agda",
+    ".lagda",
+    ".lagda.md",
+    ".el",
     ".scala",
     ".java",
     ".sbt",
@@ -23,6 +29,41 @@ TEXT_FILE_EXTENSIONS = {
     ".yml",
     ".json",
 }
+
+
+def configured_text_file_extensions(config: dict) -> set[str]:
+    filters = config.get("filters", {})
+    configured = filters.get("text_file_extensions")
+
+    if not configured:
+        return set(DEFAULT_TEXT_FILE_EXTENSIONS)
+
+    result: set[str] = set()
+    for ext in configured:
+        if not ext:
+            continue
+        ext = str(ext).strip()
+        if not ext:
+            continue
+        if not ext.startswith("."):
+            ext = f".{ext}"
+        result.add(ext)
+
+    return result or set(DEFAULT_TEXT_FILE_EXTENSIONS)
+
+
+def matches_configured_extension(path: Path, allowed_extensions: set[str]) -> bool:
+    suffixes = path.suffixes
+    if not suffixes:
+        return False
+
+    # Support both normal suffixes like ".hs" and multi-suffix files like ".lagda.md".
+    for i in range(len(suffixes)):
+        combined = "".join(suffixes[i:])
+        if combined in allowed_extensions:
+            return True
+
+    return False
 
 
 def is_included(rel_path: str, config: dict) -> bool:
@@ -50,9 +91,11 @@ def is_included(rel_path: str, config: dict) -> bool:
 
 
 def iter_tracked_text_files(repo_root: Path, config: dict):
+    allowed_extensions = configured_text_file_extensions(config)
+
     for rel in git_tracked_files(repo_root):
         path = repo_root / rel
-        if path.suffix not in TEXT_FILE_EXTENSIONS:
+        if not matches_configured_extension(path, allowed_extensions):
             continue
         if not is_included(rel, config):
             continue

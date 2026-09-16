@@ -10,7 +10,20 @@ from pathlib import Path
 from scripts.common import load_config, write_csv
 
 
-BUGFIX_TERMS = ["fix", "bug", "regression", "warning", "error"]
+BUGFIX_TERMS = [
+    "fix",
+    "bug",
+    "regression",
+    "warning",
+    "error",
+    "panic",
+    "impossible",
+    "invariant",
+    "unsolved",
+    "confluence",
+    "termination",
+    "coverage",
+]
 
 
 def is_included(rel_path: str, config: dict) -> bool:

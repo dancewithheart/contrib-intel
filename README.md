@@ -1,6 +1,7 @@
 
 * set env var used to choose repository
 ```sh
+export FILE=configs/agda.yaml
 export FILE=configs/scala3.yaml
 export FILE=configs/io-sim.yaml
 ```

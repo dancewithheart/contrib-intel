@@ -2,7 +2,7 @@
 set -euo pipefail
 
 #export OS_PROJECT=io-sim
-export OS_PROJECT=scala3
+export OS_PROJECT=agda
 #export OS_PROJECT=cardano-ledger
 #export OS_PROJECT=ouroboros-consensus
 export FILE=configs/${OS_PROJECT}.yaml

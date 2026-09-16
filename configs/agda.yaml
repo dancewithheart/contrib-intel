@@ -1,0 +1,185 @@
+repo: agda
+owner: agda
+name: agda
+
+paths:
+  local_repo: ~/agda
+  data_dir: data/agda
+  report_path: reports/agda-opportunities.md
+
+github:
+  per_page: 100
+  max_issues: 400
+  max_prs: 300
+  use_cache: true
+  max_issue_context: 25
+
+issue_queries:
+  state: open
+  labels_include: []
+  labels_exclude:
+    - question
+    - support
+
+keywords:
+  subsystems:
+    type_checking:
+      - "Agda.TypeChecking"
+      - "type checking"
+      - "typechecker"
+      - "constraint"
+      - "constraints"
+      - "meta"
+      - "metavariable"
+      - "unification"
+      - "conversion"
+      - "reduce"
+      - "normalization"
+      - "normalisation"
+      - "subject reduction"
+      - "__IMPOSSIBLE__"
+      - "InternalError"
+
+    rewriting:
+      - "rewrite"
+      - "rewriting"
+      - "confluence"
+      - "critical pair"
+      - "non-linear rewrite"
+      - "rewrite rules"
+
+    interaction:
+      - "interaction"
+      - "goal"
+      - "hole"
+      - "give"
+      - "case split"
+      - "Agsy"
+      - "auto"
+      - "refine"
+
+    parser_and_scope:
+      - "parser"
+      - "parsed twice"
+      - "parsing"
+      - "scope"
+      - "scope checking"
+      - "syntax"
+      - "module system"
+
+    termination_coverage:
+      - "termination"
+      - "termination check"
+      - "coverage"
+      - "coverage check"
+      - "positivity"
+      - "guardedness"
+      - "sized types"
+
+    agda_mode:
+      - "agda2-mode"
+      - "agda-mode"
+      - "emacs"
+      - "highlight"
+      - "highlighting"
+      - "xref"
+      - "buffer"
+
+    performance_parallel:
+      - "performance"
+      - "profiling"
+      - "parallel"
+      - "-j"
+      - "repeated type-checking"
+      - "parsed twice"
+      - "slow"
+
+    build_library:
+      - "build-library"
+      - ".agda-lib"
+      - "interface file"
+      - "agdai"
+      - "library root"
+      - "include path"
+
+  grep_patterns:
+    - "TODO"
+    - "FIXME"
+    - "XXX"
+    - "HACK"
+    - "should not happen"
+    - "__IMPOSSIBLE__"
+    - "InternalError"
+    - "Not implemented"
+    - "work around"
+    - "re-enable"
+    - "invariant"
+    - "panic"
+
+filters:
+  include_paths:
+    - "src/full/Agda/"
+    - "src/data/emacs-mode/"
+    - "test/"
+  exclude_paths:
+    - "dist-newstyle/"
+    - ".stack-work/"
+    - "_build/"
+    - "benchmark/"
+    - "doc/"
+  exclude_file_names: []
+  exclude_suffixes:
+    - ".agdai"
+    - ".hi"
+    - ".o"
+    - ".so"
+    - ".log"
+    - ".md"
+
+scoring:
+  issue_match: 3.0
+  repo_signal: 2.0
+  churn: 1.5
+  bugfix_churn: 2.5
+  dormant_bonus: 2.0
+  personal_interest_bonus: 2.0
+
+ranking_rules:
+  boost_if_comment_mentions:
+    - "regression"
+    - "reproducer"
+    - "test case"
+    - "should"
+    - "would be nice"
+    - "easy fix"
+    - "good first issue"
+
+context_rules:
+  maintainer_handles:
+    - "andreasabel"
+    - "nad"
+    - "jespercockx"
+    - "UlfNorell"
+    - "plt-amy"
+
+  maintainer_hint_phrases:
+    - "we should"
+    - "would be nice"
+    - "follow-up"
+    - "good first issue"
+    - "easy fix"
+    - "should be possible"
+    - "this looks wrong"
+    - "this doesn't look right"
+    - "I agree"
+    - "could be fixed by"
+    - "a test case"
+    - "needs a test"
+
+  dormant_days_threshold: 180
+
+context_scoring:
+  same_repo_pr_penalty: 4.0
+  external_reference_bonus: 3.0
+  maintainer_hint_bonus: 4.0
+  dormant_bonus: 2.0
