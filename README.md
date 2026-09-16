@@ -2,27 +2,25 @@
 
 `contrib-intel` ranks possible open-source contribution areas in a large repository.
 
-It combines:
-- open GitHub issues
-- issue discussion and cross-references
-- source-code signals
-- Git history.
+It combines open GitHub issues, issue discussion and cross-references, source-code
+signals, and Git history. The result is a Markdown report of concrete issues and
+subsystems worth inspecting manually.
 
-The result is a Markdown report of concrete issues and subsystems worth inspecting manually.
-
-This is a heuristic decision-support tool it does not decide whether an issue is suitable or unclaimed.
+This is a heuristic decision-support tool. It is **not a machine-learning model**
+and it does not decide whether an issue is suitable or unclaimed.
 
 ## Problem
 
 Large repositories can have thousands of issues and years of history. Labels such
 as `good first issue` help, but they do not answer questions such as:
+
 - Is somebody already working on this issue?
 - Has a maintainer suggested a direction?
 - Which source files are probably relevant?
 - Is this subsystem active, bug-prone, or full of deferred work?
 - Which opportunities match the contributor's interests?
 
-`contrib-intel` turns those signals into a short list for OS contributors to review.
+`contrib-intel` turns those signals into a reproducible shortlist for human review.
 
 ## Pipeline
 
@@ -58,10 +56,10 @@ In simplified form:
 
 ```text
 issue score = keyword matches
-            + external references Ã— external-reference bonus
-            + maintainer hints Ã— maintainer-hint bonus
+            + external references × external-reference bonus
+            + maintainer hints × maintainer-hint bonus
             + dormant bonus
-            - same-repository PRs Ã— active-work penalty
+            - same-repository PRs × active-work penalty
 ```
 
 ### Subsystem-cluster score
@@ -89,11 +87,11 @@ From the checked-in `reports/scala3-opportunities.md`:
 Top concrete issue candidates:
 
 - #24776 Crash in experimental macro annotation adding a definition to ClassDef
-  (subsystem: typer, score: 324.0) â€” inspect manually
+  (subsystem: typer, score: 324.0) — inspect manually
 - #25204 no owner from <none>/<none> in emb.apply
-  (subsystem: typer, score: 265.0) â€” inspect manually
+  (subsystem: typer, score: 265.0) — inspect manually
 - #24719 Assertion failure in LazyAnnotation.tree
-  (subsystem: typer, score: 245.0) â€” inspect manually
+  (subsystem: typer, score: 245.0) — inspect manually
 ```
 
 The full report also includes issue clusters, likely files, linked pull requests,
@@ -145,7 +143,7 @@ Generated files:
 - `reports/assets/scala3/issue-and-score-distributions.png`
 - `reports/assets/scala3/churn-vs-bugfix.png`
 
-To print 5â€“10 lines of actual generated candidate output:
+To print 5–10 lines of actual generated candidate output:
 
 ```bash
 sed -n '/Top concrete issue candidates:/,+9p' reports/scala3-opportunities.md
