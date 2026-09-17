@@ -9,7 +9,6 @@ from pathlib import Path
 
 from scripts.common import load_config, write_csv
 
-
 BUGFIX_TERMS = [
     "fix",
     "bug",

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from scripts.common import write_json, read_json
+from scripts.common import read_json, write_json
 
 
 def test_reads_cached_issue_and_pr_files_without_network(tmp_path: Path):

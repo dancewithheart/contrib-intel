@@ -126,9 +126,12 @@ def render_churn_report(churn_report: list[dict]) -> list[str]:
     lines.append("Top files where tests, refactors, or smaller components may pay off:")
     lines.append("")
     for row in churn_report[:15]:
-        lines.append(
-            f"- `{row['file']}` — churn={row['churn']}, bugfix_churn={row['bugfix_churn']}, todo_hits={row['todo_hits']}"
-        )
+        file = row['file']
+        churn = row['churn']
+        bugfix_churn = row['bugfix_churn']
+        todo_hints = row['todo_hits']
+        line = f"- `{file}` — churn={churn}, bugfix_churn={bugfix_churn}, todo_hits={todo_hints}"
+        lines.append(line)
     lines.append("")
     return lines
 
