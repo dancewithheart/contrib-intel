@@ -12,7 +12,6 @@ from scripts.common import (
     write_json,
 )
 
-
 DEFAULT_TEXT_FILE_EXTENSIONS = {
     ".hs",
     ".lhs",

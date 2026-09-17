@@ -3,15 +3,15 @@ from __future__ import annotations
 import csv
 import json
 import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
-from datetime import datetime, timezone
 
 import yaml
 
 
 def load_config(path: str) -> dict[str, Any]:
-    with open(path, "r", encoding="utf-8") as f:
+    with open(path, encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -33,7 +33,7 @@ def write_json(path: Path, value: Any) -> None:
 def read_csv(path: Path) -> list[dict[str, str]]:
     if not path.exists():
         return []
-    with open(path, "r", encoding="utf-8", newline="") as f:
+    with open(path, encoding="utf-8", newline="") as f:
         return list(csv.DictReader(f))
 
 
