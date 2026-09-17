@@ -9,7 +9,7 @@ subsystems worth inspecting manually.
 This is a heuristic decision-support tool. It is **not a machine-learning model**
 and it does not decide whether an issue is suitable or unclaimed.
 
-## Problem
+## [Problem](https://lamport.azurewebsites.net/pubs/state-the-problem.pdf)
 
 Large repositories can have thousands of issues and years of history. Labels such
 as `good first issue` help, but they do not answer questions such as:
