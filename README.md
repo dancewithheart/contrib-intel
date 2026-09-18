@@ -100,14 +100,10 @@ targets.
 
 ## Setup
 
-Requirements: Python 3.10+, Git, and a local checkout of the repository to inspect.
-
 ```bash
 git clone https://github.com/dancewithheart/contrib-intel.git
 cd contrib-intel
-python3 -m venv .venv
-source .venv/bin/activate
-python -m pip install --upgrade pip
+pyenv local 3.14.7
 python -m pip install -e ".[analysis,dev]"
 ```
 
@@ -129,7 +125,7 @@ builds the opportunity report, and creates the pandas analysis report and plots:
 ./go.sh scala3 --refresh
 ```
 
-Omit `--refresh` to reuse cached GitHub responses:
+skip `--refresh` to reuse cached GH responses:
 
 ```bash
 ./go.sh scala3
@@ -138,10 +134,7 @@ Omit `--refresh` to reuse cached GitHub responses:
 Generated files:
 
 - `reports/scala3-opportunities.md`
-- `reports/scala3-analysis.md`
-- `reports/assets/scala3/subsystem-counts.png`
-- `reports/assets/scala3/issue-and-score-distributions.png`
-- `reports/assets/scala3/churn-vs-bugfix.png`
+- `reports/scala3-analysis.md` (+ png's in `reports/assets/scala3/`)
 
 To print 5–10 lines of actual generated candidate output:
 
