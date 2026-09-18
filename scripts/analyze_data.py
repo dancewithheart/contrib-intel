@@ -61,10 +61,7 @@ def load_frames(data_dir: Path) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFram
     return issues, candidates, churn_frame
 
 
-def add_analysis_columns(
-    issues: pd.DataFrame,
-    candidates: pd.DataFrame,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+def add_analysis_columns(issues: pd.DataFrame, candidates: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     issues = issues.copy()
     candidates = candidates.copy()
 
