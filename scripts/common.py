@@ -3,7 +3,7 @@ from __future__ import annotations
 import csv
 import json
 import subprocess
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -65,7 +65,7 @@ def parse_github_datetime(value: str | None) -> datetime | None:
     if not value:
         return None
     try:
-        return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+        return datetime.strptime(value, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=UTC)
     except ValueError:
         return None
 
@@ -74,5 +74,5 @@ def days_since(value: str | None) -> int | None:
     dt = parse_github_datetime(value)
     if dt is None:
         return None
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     return (now - dt).days

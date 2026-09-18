@@ -61,8 +61,8 @@ def run_git(repo_root: Path, args: list[str]) -> str:
 
 
 def parse_name_only_log(text: str, config: dict) -> tuple[Counter[str], Counter[str]]:
-    churn = Counter()
-    bugfix_churn = Counter()
+    churn: Counter[str] = Counter()
+    bugfix_churn: Counter[str] = Counter()
     current_is_bugfix = False
 
     for raw_line in text.splitlines():
