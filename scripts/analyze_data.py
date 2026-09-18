@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+from typing import cast
 
 import matplotlib
 import pandas as pd
@@ -66,7 +67,7 @@ def add_analysis_columns(issues: pd.DataFrame, candidates: pd.DataFrame) -> tupl
     candidates = candidates.copy()
 
     now = pd.Timestamp.now(tz="UTC")
-    created_at = pd.to_datetime(issues.get("created_at"), utc=True, errors="coerce")
+    created_at = pd.to_datetime(issues["created_at"], utc=True, errors="coerce")
     issues["age_days"] = (now - created_at).dt.days
     candidates["local_score"] = pd.to_numeric(candidates["local_score"], errors="coerce")
     candidates["dormant_days"] = pd.to_numeric(candidates["dormant_days"], errors="coerce")
@@ -148,7 +149,8 @@ def build_report(
         .reset_index()
     )
 
-    correlation = churn[["churn", "bugfix_churn"]].corr().iloc[0, 1]
+    correlation_value = churn[["churn", "bugfix_churn"]].corr().iloc[0, 1]
+    correlation = cast(float, correlation_value)
     correlation_text = "undefined" if pd.isna(correlation) else f"{correlation:.3f}"
 
     relative_plots = [path.relative_to(report_path.parent) for path in plot_paths]
