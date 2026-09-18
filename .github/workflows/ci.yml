@@ -30,3 +30,6 @@ jobs:
 
       - name: Run test
         run: pytest
+
+      - name: Check static types
+        run: mypy scripts
