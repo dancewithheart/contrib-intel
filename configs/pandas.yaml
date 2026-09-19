@@ -3,94 +3,15 @@ owner: pandas-dev
 name: pandas
 
 paths:
-  local_repo: ~/pandas
   data_dir: data/pandas
   report_path: reports/pandas-opportunities.md
 
 github:
   per_page: 100
-  # Current fetcher caps the combined issue + PR sample at 300.
   max_issues: 300
   max_prs: 300
   use_cache: true
-  # Fetch context for every issue in this sample.
   max_issue_context: 300
 
 issue_queries:
   state: open
-  # Label filters are not implemented by the current fetcher.
-  labels_include: []
-  labels_exclude: []
-
-keywords:
-  subsystems:
-    categorical:
-      - categorical
-      - category
-      - categories
-    missing_data:
-      - fillna
-      - dropna
-      - isna
-      - pd.NA
-    groupby:
-      - groupby
-      - aggregate
-      - aggregation
-    strings:
-      - StringDtype
-      - str.cat
-      - str.contains
-      - str.extract
-    sql_io:
-      - read_sql
-      - to_sql
-      - sqlalchemy
-      - sqlite
-  grep_patterns:
-    - TODO
-    - FIXME
-    - NotImplementedError
-
-filters:
-  # Required: the default extension list does not contain Python.
-  text_file_extensions: [".py"]
-  include_paths:
-    - pandas/core/
-    - pandas/io/sql.py
-    - pandas/tests/
-  exclude_paths: []
-  exclude_file_names: []
-  exclude_suffixes: []
-
-# Starting weights, not calibrated. These affect cluster scores.
-# Individual issue keyword-frequency scores are not weighted here.
-scoring:
-  issue_match: 3.0
-  repo_signal: 0.1
-  churn: 0.02
-  bugfix_churn: 0.05
-  # Legacy name: this is actually the TODO-hit bonus.
-  dormant_bonus: 1.0
-  personal_interest_bonus: 0.0
-
-ranking_rules:
-  boost_if_comment_mentions:
-    - TODO
-    - FIXME
-
-context_rules:
-  # Leave empty until relevant maintainer identities are verified.
-  maintainer_handles: []
-  maintainer_hint_phrases:
-    - we should
-    - would be nice
-    - good first issue
-    - needs a test
-  dormant_days_threshold: 120
-
-context_scoring:
-  same_repo_pr_penalty: 10.0
-  external_reference_bonus: 2.0
-  maintainer_hint_bonus: 4.0
-  dormant_bonus: 0.0
