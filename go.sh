@@ -28,9 +28,7 @@ python3 -m scripts.rank_candidates "$config"
 python3 -m scripts.build_report "$config"
 
 report="reports/${project}-opportunities.md"
-analysis="reports/${project}-analysis.md"
 
 printf 'Generated %s\n' "$report"
-printf 'Generated %s\n' "$analysis"
 printf '\nCandidate sample:\n'
 sed -n '/Top concrete issue candidates:/,+9p' "$report"
