@@ -1,5 +1,6 @@
 from scripts.build_report import make_summary
 
+
 def test_summary_contains_issue_without_open_pr():
     candidates = [
         {
