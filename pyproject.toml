@@ -37,6 +37,12 @@ target-version = "py314"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "UP", "B"]
+# https://docs.astral.sh/ruff/default-rules/
+# E	  pycodestyle errors
+# F	  Pyflakes: unused imports, undefined names, etc.
+# I	  import sorting
+# UP  modernize Python syntax
+# B	  bugbear: suspicious/error-prone code
 
 [tool.mypy]
 python_version = "3.14"
