@@ -24,16 +24,11 @@ fi
 
 python3 -m scripts.fetch_github_issues "$config" "${refresh_args[@]}"
 python3 -m scripts.fetch_issue_context "$config" "${refresh_args[@]}"
-python3 -m scripts.scan_repo_signals "$config"
-python3 -m scripts.mine_git_history "$config"
 python3 -m scripts.rank_candidates "$config"
 python3 -m scripts.build_report "$config"
-python3 -m scripts.analyze_data "$config"
 
 report="reports/${project}-opportunities.md"
-analysis="reports/${project}-analysis.md"
 
 printf 'Generated %s\n' "$report"
-printf 'Generated %s\n' "$analysis"
 printf '\nCandidate sample:\n'
 sed -n '/Top concrete issue candidates:/,+9p' "$report"

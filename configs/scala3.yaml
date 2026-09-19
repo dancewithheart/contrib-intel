@@ -3,7 +3,6 @@ owner: scala
 name: scala3
 
 paths:
-  local_repo: ~/scala3
   data_dir: data/scala3
   report_path: reports/scala3-opportunities.md
 
@@ -12,111 +11,7 @@ github:
   max_issues: 300
   max_prs: 300
   use_cache: true
-  max_issue_context: 30
+  max_issue_context: 300
 
 issue_queries:
   state: open
-  labels_include: []
-  labels_exclude:
-    - question
-
-keywords:
-  subsystems:
-    match_types:
-      - "match type"
-      - "matchtype"
-      - "MatchType"
-      - "MatchTypeNoCases"
-      - "TypeComparer"
-    typer:
-      - "Typer"
-      - "typedValDef"
-      - "typedExpr"
-      - "typedType"
-    namer:
-      - "Namer"
-      - "rhsType"
-      - "cookedRhsType"
-      - "inferredResultType"
-    diagnostics:
-      - "warning"
-      - "error message"
-      - "diagnostic"
-      - "source position"
-      - "report.warning"
-    explicit_nulls:
-      - "explicit nulls"
-      - "unsafeNulls"
-      - "nullable"
-      - "Null"
-
-  grep_patterns:
-    - "TODO"
-    - "FIXME"
-    - "TODO warn"
-    - "should not happen"
-    - "work around"
-    - "re-enable"
-    - "commented out"
-
-filters:
-  include_paths:
-    - "compiler/src/dotty/tools/dotc/"
-    - "compiler/test/"
-    - "tests/"
-  exclude_paths:
-    - "out/"
-    - "target/"
-    - "docs/"
-    - "library/"
-    - "scala3doc/"
-    - "sbt-test/"
-    - "tests/pos-with-compiler-cc/"
-  exclude_file_names:
-    - "output_full.txt"
-  exclude_suffixes:
-    - ".semanticdb"
-    - ".log"
-
-scoring:
-  issue_match: 3.0
-  repo_signal: 2.0
-  churn: 1.5
-  bugfix_churn: 2.5
-  dormant_bonus: 2.0
-  personal_interest_bonus: 1.5
-
-ranking_rules:
-  boost_if_comment_mentions:
-    - "TODO warn"
-    - "re-enable"
-    - "regression"
-
-context_rules:
-  maintainer_handles:
-    - "odersky"
-    - "smarter"
-    - "som-snytt"
-    - "Eugene-Yang"
-    - "EugeneFlesselle"
-
-  maintainer_hint_phrases:
-    - "we should"
-    - "would be nice"
-    - "follow-up"
-    - "good first issue"
-    - "another instance of"
-    - "should either"
-    - "this looks wrong"
-    - "this doesn't look right"
-    - "it would be sensible"
-    - "I agree"
-    - "we could"
-
-  dormant_days_threshold: 120
-
-context_scoring:
-  same_repo_pr_penalty: 4.0
-  external_reference_bonus: 3.0
-  maintainer_hint_bonus: 4.0
-  dormant_bonus: 2.0

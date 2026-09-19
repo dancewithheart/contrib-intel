@@ -70,33 +70,26 @@ def main() -> None:
         issue_dir = context_dir / str(number)
         ensure_dir(issue_dir)
 
-        comments_path = issue_dir / "comments.json"
         timeline_path = issue_dir / "timeline.json"
 
-        if use_cache and not refresh and comments_path.exists() and timeline_path.exists():
-            comments = read_json(comments_path, [])
+        if use_cache and not refresh and timeline_path.exists():
             timeline = read_json(timeline_path, [])
         else:
-            comments_url = f"https://api.github.com/repos/{owner}/{name}/issues/{number}/comments"
             timeline_url = f"https://api.github.com/repos/{owner}/{name}/issues/{number}/timeline"
 
-            comments = fetch_paginated(comments_url, token)
             timeline = fetch_paginated(
                 timeline_url,
                 token,
                 accept="application/vnd.github.mockingbird-preview+json",
             )
 
-            write_json(comments_path, comments)
             write_json(timeline_path, timeline)
             time.sleep(0.2)
 
         summary.append(
             {
                 "number": number,
-                "comments_path": str(comments_path),
                 "timeline_path": str(timeline_path),
-                "comment_count": len(comments),
                 "timeline_event_count": len(timeline),
             }
         )

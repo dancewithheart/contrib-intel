@@ -155,11 +155,8 @@ sed -n '1,35p' reports/scala3-opportunities.md
 | `configs/*.yaml` | Repository paths, vocabulary, filters, and scoring weights |
 | `scripts/fetch_github_issues.py` | Fetch open issues and pull requests through the GitHub API |
 | `scripts/fetch_issue_context.py` | Fetch issue comments and timeline/cross-reference events |
-| `scripts/scan_repo_signals.py` | Scan tracked text files for TODOs and subsystem keywords |
-| `scripts/mine_git_history.py` | Measure file churn and bug-fix-related churn from Git history |
 | `scripts/rank_candidates.py` | Build issue, cluster, topic, and churn rankings |
 | `scripts/build_report.py` | Render the opportunity report |
-| `scripts/analyze_data.py` | Build pandas summaries and matplotlib plots |
 | `tests/` | Unit tests for parsing, filtering, ranking, and report generation |
 
 Intermediate CSV and JSON files are written under `data/<repo>/`. They make each
