@@ -304,7 +304,7 @@ def build_issue_candidates(
         issues: list[dict],
         issue_context: dict[int, dict],
         subsystem_hits: list[dict],
-        config: dict,
+        config: dict
 ) -> list[dict]:
     subsystem_keywords = config["keywords"]["subsystems"]
     candidates: list[dict] = []
@@ -315,6 +315,12 @@ def build_issue_candidates(
         context_analysis = analyze_issue_context(issue, issue_context.get(issue["number"]), config)
         local_score = score_issue_candidate(context_analysis, subsystem_match_score, config)
         recommendation = issue_recommendation(context_analysis)
+        pr_info = inspect_pr_references(issue_context.get(issue["number"]), config)
+
+        if pr_info["pr_status"] == "open_pr":
+            recommendation = "Open PR found; inspect existing work"
+        elif pr_info["pr_status"] == "not_checked":
+            recommendation = "PR status not checked"
 
         candidates.append(
             {
@@ -330,17 +336,14 @@ def build_issue_candidates(
                 "dormant_days": context_analysis["dormant_days"],
                 "local_score": local_score,
                 "recommendation": recommendation,
+                **pr_info,
             }
         )
 
     return sorted(candidates, key=lambda row: row["local_score"], reverse=True)
 
 
-def build_churn_report(
-        file_churn: list[dict],
-        bugfix_churn: list[dict],
-        todo_hits: list[dict],
-) -> list[dict]:
+def build_churn_report(file_churn: list[dict], bugfix_churn: list[dict], todo_hits: list[dict]) -> list[dict]:
     bugfix_by_file = {row["file"]: int(row["bugfix_churn"]) for row in bugfix_churn}
     todo_count_by_file: dict[str, int] = defaultdict(int)
     for row in todo_hits:
@@ -388,15 +391,10 @@ def main() -> None:
         todo_hits,
         file_churn,
         bugfix_churn,
-        config,
+        config
     )
     churn_report = build_churn_report(file_churn, bugfix_churn, todo_hits)
-    issue_candidates = build_issue_candidates(
-        issues,
-        issue_context,
-        subsystem_hits,
-        config,
-    )
+    issue_candidates = build_issue_candidates(issues, issue_context, subsystem_hits, config)
 
     write_json(data_dir / "topic_map.json", topic_map)
     write_json(data_dir / "issue_clusters.json", issue_clusters)
@@ -407,6 +405,44 @@ def main() -> None:
     print(f"saved {len(issue_clusters)} issue-cluster entries")
     print(f"saved {len(churn_report)} churn-report entries")
     print(f"saved {len(issue_candidates)} issue-candidate entries")
+
+def inspect_pr_references(context: dict | None, config: dict) -> dict:
+    if context is None:
+        return {"pr_status": "not_checked", "open_prs": []}
+
+    prefix = (f"https://github.com/{config['owner']}/{config['name']}/pull/").lower()
+    references = {}
+
+    for event in context.get("timeline", []):
+        if event.get("event") != "cross-referenced":
+            continue
+
+        source = (event.get("source") or {}).get("issue") or {}
+        if "pull_request" not in source:
+            continue
+
+        url = source.get("html_url") or ""
+        if not url.lower().startswith(prefix):
+            continue
+
+        # Deduplicate repeated references to the same PR.
+        references[url] = {
+            "number": source["number"],
+            "url": url,
+            "state": source.get("state"),
+            "draft": source.get("draft", False),
+        }
+
+    open_prs = [pr for pr in references.values() if pr["state"] == "open"]
+
+    if open_prs:
+        status = "open_pr"
+    elif any(pr["state"] not in {"open", "closed"} for pr in references.values()):
+        status = "not_checked"
+    else:
+        status = "no_open_pr_found"
+
+    return {"pr_status": status, "open_prs": open_prs}
 
 if __name__ == "__main__":
     main()
