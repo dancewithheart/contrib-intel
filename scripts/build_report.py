@@ -31,7 +31,8 @@ def make_summary(issue_clusters: list[dict], topic_map: list[dict], issue_candid
             lines.append(f"{idx}. **{cluster['title']}** — issues {issue_sample}; files {file_sample}")
         lines.append("")
 
-    top_candidates = issue_candidates[:5]
+    issue_candidates_not_taken = [row for row in issue_candidates if row.get("pr_status") == "no_open_pr_found"]
+    top_candidates = issue_candidates_not_taken[:5]
     if top_candidates:
         lines.append("Top concrete issue candidates:")
         lines.append("")
@@ -109,7 +110,19 @@ def render_issue_candidates(issue_candidates: list[dict]) -> list[str]:
             lines.append("")
 
         lines.append("- contribution signals:")
-        lines.append(f"  - already actively worked on in same repo? {'yes' if row['same_repo_prs'] > 0 else 'no'}")
+        status = row.get("pr_status", "not_checked")
+
+        if status == "open_pr":
+            links = ", ".join(
+                f"[#{pr['number']}]({pr['url']})"
+                + (" (draft)" if pr["draft"] else "")
+                for pr in row["open_prs"]
+            )
+            lines.append(f"  - Open PR references: {links}")
+        elif status == "no_open_pr_found":
+            lines.append("  - No open PR references found in fetched timeline")
+        else:
+            lines.append("  - PR status: not checked")
         lines.append(f"  - same-repo PR links: {row['same_repo_prs']}")
         lines.append(f"  - referenced by external repos? {'yes' if row['external_refs'] > 0 else 'no'}")
         lines.append(f"  - external references: {row['external_refs']}")
